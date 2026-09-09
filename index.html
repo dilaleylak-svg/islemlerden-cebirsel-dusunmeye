@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>İşlem Ustaları Akademisi</title>
+  <style>
+    :root{--ink:#26344a;--purple:#7048c8;--blue:#2b87d3;--mint:#31b89a;--orange:#ff974d;--paper:#fffefa;--soft:#f2efff}
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(135deg,#e9f8ff,#fff3dd 55%,#f0eaff);min-height:100vh}
+    button{font:inherit}.shell{max-width:1120px;margin:auto;padding:18px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{display:flex;align-items:center;gap:12px}.logo{font-size:36px;background:white;border-radius:18px;padding:8px;box-shadow:0 6px 18px #63709222}.brand b{font-size:clamp(20px,4vw,32px);display:block}.brand small{color:#617087}.scorebox{background:white;border:2px solid #f1c453;border-radius:20px;padding:10px 16px;font-weight:800;white-space:nowrap;box-shadow:0 5px 15px #a8853822}
+    .hero{text-align:center;padding:28px 12px 16px}.hero h1{font-size:clamp(29px,6vw,52px);margin:0;color:#5937ad}.hero p{font-size:clamp(16px,2.3vw,20px);max-width:750px;margin:10px auto;line-height:1.5}.badge{display:inline-block;background:#fff;border-radius:999px;padding:8px 14px;color:#266b85;font-weight:700}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:17px;margin:22px 0}.card{border:0;background:white;border-radius:24px;padding:22px;text-align:left;box-shadow:0 8px 22px #36537720;cursor:pointer;transition:.2s;border-bottom:6px solid var(--c)}.card:hover,.card:focus{transform:translateY(-5px);box-shadow:0 13px 28px #3653772d}.card .icon{font-size:46px}.card h2{font-size:21px;margin:8px 0 6px;color:var(--c)}.card p{margin:0 0 14px;line-height:1.45}.play{display:inline-block;background:var(--c);color:#fff;padding:8px 14px;border-radius:999px;font-weight:800}.outcome{font-size:12px;color:#68768c;margin-top:12px}
+    .panel{display:none;background:var(--paper);max-width:820px;margin:18px auto;border-radius:28px;padding:clamp(18px,4vw,34px);box-shadow:0 10px 34px #31445d2b}.panel.on{display:block}.gamehead{display:flex;align-items:center;gap:12px}.back{border:0;background:#ece7fa;color:#5231a4;border-radius:14px;padding:9px 13px;cursor:pointer;font-weight:800}.gamehead h2{margin:0;font-size:clamp(21px,4vw,30px)}.progress{height:13px;background:#e8eaf0;border-radius:999px;overflow:hidden;margin:20px 0}.bar{height:100%;background:linear-gradient(90deg,var(--mint),#68d56f);width:0;transition:.35s}.meta{display:flex;justify-content:space-between;color:#657086;font-weight:700}.question{text-align:center;font-size:clamp(21px,4vw,31px);font-weight:850;margin:23px 0 12px;line-height:1.35}.visual{text-align:center;font-size:clamp(22px,5vw,38px);min-height:48px;margin-bottom:18px}.answers{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.answer{border:3px solid #d9deeb;border-radius:18px;background:white;padding:15px 10px;font-weight:800;font-size:19px;cursor:pointer;color:var(--ink)}.answer:hover:not(:disabled){border-color:var(--blue);background:#eef8ff}.answer.good{background:#dff8e9;border-color:#35b776}.answer.bad{background:#ffe4e4;border-color:#ef6666}.feedback{text-align:center;min-height:32px;font-weight:850;margin:15px 0 5px}.next{display:none;margin:10px auto 0;border:0;background:var(--purple);color:white;padding:12px 24px;border-radius:15px;font-weight:850;cursor:pointer}.result{text-align:center}.stars{font-size:52px;letter-spacing:4px}.result h3{font-size:30px;margin:8px}.again{border:0;background:var(--mint);color:white;padding:13px 20px;border-radius:16px;font-weight:850;cursor:pointer;margin:6px}.footer{text-align:center;color:#66758a;padding:18px;font-size:14px}@media(max-width:550px){.answers{grid-template-columns:1fr}.top{align-items:flex-start}.scorebox{font-size:14px}.shell{padding:12px}}
+  </style>
+</head>
+<body>
+<main class="shell">
+  <div class="top"><div class="brand"><span class="logo">🧠</span><div><b>Kelime Kaşifleri</b><small>Öğren, dene, başar!</small></div></div><div class="scorebox">⭐ Toplam: <span id="total">0</span></div></div>
+  <section id="home">
+    <div class="hero"><span class="badge">2. Sınıf Matematik • 3. Tema</span><h1>İşlem Ustaları Akademisi</h1><p>Toplama, çıkarma, çarpma, bölme ve eşitlik görevlerini tamamla; altı ustalık rozetini topla!</p></div>
+    <div class="grid" id="cards"></div>
+  </section>
+  <section class="panel" id="panel">
+    <div class="gamehead"><button class="back" id="back">← Oyunlar</button><h2 id="gameTitle"></h2></div>
+    <div class="progress"><div class="bar" id="bar"></div></div><div class="meta"><span id="count"></span><span>Oyun puanı: <b id="gameScore">0</b></span></div>
+    <div id="play"><div class="question" id="question"></div><div class="visual" id="visual"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback"></div><button class="next" id="next">Sonraki görev →</button></div>
+    <div class="result" id="result" hidden></div>
+  </section>
+  <div class="footer">Öğrenme çıktıları Türkiye Yüzyılı Maarif Modeli 2. sınıf matematik programına göre düzenlenmiştir.</div>
+</main>
+<script>
+const G=[
+ {id:'problem',icon:'🕵️',color:'#e26767',title:'Problem Çözme Dedektifi',desc:'Günlük yaşamda toplama ve çıkarma gerektiren iki aşamalı problemleri çöz.',out:'MAT.2.2.1',q:[
+ ['Ece’nin 24, Ali’nin 18 çıkartması var. İkisi toplam kaç çıkartma eder?','🎟️ 24 + 18 = ?',42,[42,32,52,40]],
+ ['Sepette 63 elma vardı. 27 elma satıldı. Kaç elma kaldı?','🍎 63 − 27 = ?',36,[36,46,34,40]],
+ ['Bir sınıf 3 deste kalem aldı. 8 kalemi kullandı. Kaç kalem kaldı?','✏️ 3 deste = 30 kalem',22,[22,28,18,38]],
+ ['Kütüphaneye pazartesi 25, salı 32 kitap geldi. 14 kitap ödünç verildi. Kaç kitap kaldı?','📚 (25 + 32) − 14',43,[43,47,53,39]],
+ ['2 düzine balonun 9’u patladı. Kaç balon kaldı?','🎈 2 düzine = 24 balon',15,[15,13,17,19]],
+ ['Otobüste 38 yolcu vardı. 16 kişi indi, 9 kişi bindi. Son durumda kaç yolcu var?','🚌 38 − 16 + 9',31,[31,23,29,47]]]},
+ {id:'mental',icon:'⚡',color:'#2587ca',title:'Tahmin ve Zihin Arenası',desc:'Toplama ve çıkarma sonuçlarını tahmin et, zihinden bul ve karşılaştır.',out:'MAT.2.2.2',q:[
+ ['38 + 21 işleminin sonucuna en yakın tahmin hangisidir?','38 ≈ 40, 21 ≈ 20',60,[60,50,70,40]],
+ ['67 − 29 işleminin sonucuna en yakın tahmin hangisidir?','67 ≈ 70, 29 ≈ 30',40,[40,30,50,38]],
+ ['46 + 9 işlemini zihinden bul.','46 + 10 − 1',55,[55,56,54,65]],
+ ['72 − 8 işlemini zihinden bul.','72 − 10 + 2',64,[64,62,66,80]],
+ ['29 + 34 için 60 tahmini yapıldı. Gerçek sonuç kaçtır?','Tahmin: 30 + 30 = 60',63,[63,53,69,73]],
+ ['85 − 41 işleminin gerçek sonucu hangisidir?','Tahminin: 90 − 40 ≈ 50',44,[44,46,54,40]]]},
+ {id:'inverse',icon:'🌉',color:'#7652cf',title:'Ters İşlem Köprüsü',desc:'Toplama ile çıkarmanın birbirini nasıl kontrol ettiğini keşfet.',out:'MAT.2.2.3',q:[
+ ['27 + 15 = 42 ise işlemi kontrol eden çıkarma hangisidir?','27 + 15 = 42', '42 − 15 = 27',['42 − 15 = 27','42 − 27 = 12','27 − 15 = 12','42 + 15 = 57']],
+ ['64 − 28 = 36 ise işlemi kontrol eden toplama hangisidir?','64 − 28 = 36','36 + 28 = 64',['36 + 28 = 64','64 + 28 = 92','36 + 64 = 100','28 − 36 = 8']],
+ ['19 + ? = 51 işleminde eksik sayı kaçtır?','51 − 19 = ?',32,[32,30,42,70]],
+ ['? − 24 = 43 işleminde eksik sayı kaçtır?','43 + 24 = ?',67,[67,57,69,19]],
+ ['76 − ? = 31 işleminde eksik sayı kaçtır?','76 − 31 = ?',45,[45,55,47,107]],
+ ['Bir toplamada toplananlardan biri 26, toplam 70’tir. Diğer toplanan kaçtır?','70 − 26 = ?',44,[44,46,54,96]]]},
+ {id:'groups',icon:'🧺',color:'#e88b35',title:'Gruplama ve Paylaşma Atölyesi',desc:'Tekrarlı toplama, eş gruplama ve paylaştırma ile çarpma-bölmeyi anlamlandır.',out:'MAT.2.2.4',q:[
+ ['4 sepette 3’er elma var. Toplam kaç elma vardır?','🍎🍎🍎   🍎🍎🍎   🍎🍎🍎   🍎🍎🍎',12,[12,7,10,16]],
+ ['5 + 5 + 5 işleminin çarpma karşılığı hangisidir?','5 + 5 + 5 = 15','3 × 5 = 15',['3 × 5 = 15','5 × 5 = 25','3 + 5 = 8','15 ÷ 5 = 2']],
+ ['20 düğme, 5 kutuya eşit paylaştırılıyor. Her kutuda kaç düğme olur?','🔘 20 ÷ 5 = ?',4,[4,5,10,15]],
+ ['18 boncuk 3’erli gruplara ayrılıyor. Kaç grup oluşur?','🔵🔵🔵 | 🔵🔵🔵 | ...',6,[6,5,9,15]],
+ ['10 tane 2’nin toplamı kaçtır?','2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2',20,[20,12,10,5]],
+ ['Bir sayıyı 1 ile çarparsak ne olur?','⭐ 1 × 5 = 5', 'Sayı değişmez',['Sayı değişmez','Sonuç sıfır olur','Sayı iki katına çıkar','Sayı bir azalır']] ]},
+ {id:'mulmental',icon:'🚀',color:'#23a382',title:'Çarpma–Bölme Zihin Gücü',desc:'Çarpma ve bölmede tahmin, zihinden işlem ve işlem ilişkisi görevlerini tamamla.',out:'MAT.2.2.5',q:[
+ ['4 × 5 işlemini zihinden bul.','5 + 5 + 5 + 5',20,[20,9,16,25]],
+ ['15 ÷ 3 işlemini zihinden bul.','15 nesneyi 3 eş gruba paylaştır.',5,[5,3,12,18]],
+ ['3 × 6 = 18 ise 18 ÷ 3 kaçtır?','Çarpma ve bölme ters işlemlerdir.',6,[6,3,9,15]],
+ ['5 tabak, her tabakta 4 kurabiye: yaklaşık ve gerçek toplam kaçtır?','🍪 5 grup × 4',20,[20,25,9,15]],
+ ['16 kalem 4 öğrenciye eşit paylaştırılırsa bir öğrenci kaç kalem alır?','✏️ 16 ÷ 4',4,[4,12,20,5]],
+ ['2 × 9 işleminin sonucunu bulmak için hangisi kullanılabilir?','İkişer ritmik say.', '9 + 9',['9 + 9','9 − 2','2 + 9','9 ÷ 2']] ]},
+ {id:'equal',icon:'⚖️',color:'#d35799',title:'Eşitlik Terazisi',desc:'Dört işlemde eşitliğin iki tarafındaki farklı ifadeleri dengele.',out:'MAT.2.2.6',q:[
+ ['18 + 7 = □ + 10 eşitliğini tamamla.','İki taraf da 25 olmalı.',15,[15,25,11,35]],
+ ['32 − 12 = 4 × □ eşitliğini tamamla.','20 = 4 × □',5,[5,4,16,8]],
+ ['Hangisinde eşitlik doğrudur?','⚖️ İki taraf aynı sonucu vermeli.','15 + 5 = 25 − 5',['15 + 5 = 25 − 5','12 + 8 = 30 − 5','4 × 5 = 18 ÷ 2','16 ÷ 4 = 3 + 3']],
+ ['3 × 4 = 18 − □ eşitliğinde eksik sayı kaçtır?','12 = 18 − □',6,[6,4,12,14]],
+ ['20 ÷ 5 = □ − 3 eşitliğini tamamla.','4 = □ − 3',7,[7,1,4,12]],
+ ['9 + 11 ile aynı sonucu veren ifade hangisidir?','9 + 11 = 20','4 × 5',['4 × 5','18 ÷ 3','30 − 5','12 + 9']] ]}
+];
+const $=s=>document.querySelector(s);let game=null,pos=0,score=0,locked=false,total=Number(localStorage.getItem('iu-total')||0);$('#total').textContent=total;
+$('#cards').innerHTML=G.map((g,i)=>`<button class="card" style="--c:${g.color}" data-i="${i}"><div class="icon">${g.icon}</div><h2>${g.title}</h2><p>${g.desc}</p><span class="play">Oyuna Başla</span><div class="outcome">Öğrenme çıktısı: ${g.out}</div></button>`).join('');
+document.querySelectorAll('.card').forEach(b=>b.onclick=()=>start(G[+b.dataset.i]));$('#back').onclick=home;$('#next').onclick=()=>{pos++;pos<game.q.length?render():finish()};
+function start(g){game=g;pos=score=0;$('#home').hidden=true;$('#panel').classList.add('on');$('#gameTitle').textContent=g.icon+' '+g.title;$('#result').hidden=true;$('#play').hidden=false;render();scrollTo({top:0,behavior:'smooth'})}
+function home(){$('#home').hidden=false;$('#panel').classList.remove('on');scrollTo({top:0,behavior:'smooth'})}
+function render(){locked=false;const [q,v,a,opts]=game.q[pos];$('#count').textContent=`Görev ${pos+1} / ${game.q.length}`;$('#gameScore').textContent=score;$('#bar').style.width=`${pos/game.q.length*100}%`;$('#question').textContent=q;$('#visual').textContent=v;$('#feedback').textContent='';$('#next').style.display='none';const shuffled=[...opts].sort(()=>Math.random()-.5);$('#answers').innerHTML=shuffled.map(x=>`<button class="answer"></button>`).join('');[...$('#answers').children].forEach((b,i)=>{b.textContent=shuffled[i];b.onclick=()=>choose(b,shuffled[i],a)})}
+function choose(btn,val,ans){if(locked)return;locked=true;document.querySelectorAll('.answer').forEach(b=>{b.disabled=true;if(String(b.textContent)===String(ans))b.classList.add('good')});if(String(val)===String(ans)){btn.classList.add('good');score+=10;total+=10;localStorage.setItem('iu-total',total);$('#total').textContent=total;$('#feedback').textContent='🎉 Harika! 10 puan kazandın.'}else{btn.classList.add('bad');$('#feedback').textContent=`💡 Doğru cevap: ${ans}`}$('#gameScore').textContent=score;$('#next').textContent=pos===game.q.length-1?'Sonucu gör 🏆':'Sonraki görev →';$('#next').style.display='block'}
+function finish(){$('#bar').style.width='100%';$('#play').hidden=true;$('#result').hidden=false;const ratio=score/(game.q.length*10),stars=ratio>=.84?'⭐⭐⭐':ratio>=.5?'⭐⭐':'⭐';$('#result').innerHTML=`<div class="stars">${stars}</div><h3>Görev tamamlandı!</h3><p><b>${score}</b> puan kazandın. ${ratio>=.84?'Bu konuda ustasın!':'Bir kez daha oynarsan daha da güçleneceksin!'}</p><button class="again" onclick="start(game)">Tekrar Oyna</button><button class="again" onclick="home()">Diğer Oyunlar</button>`}
+</script>
+</body></html>
