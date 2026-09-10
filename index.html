@@ -20,6 +20,9 @@
 
 
 
+
+    .division-panel{max-width:900px}.divpick{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}.divpickbtn{border:3px solid #c9dff5;background:#fff;border-radius:20px;padding:18px 10px;cursor:pointer;font-size:20px;font-weight:900;color:#246a9e;transition:.2s}.divpickbtn:hover{transform:translateY(-3px);border-color:#3d91ce;background:#f0f9ff}.divpickbtn span{display:block;font-size:36px;margin-bottom:5px}.divworkspace{text-align:center}.divquestion{font:950 clamp(42px,9vw,72px)/1.1 ui-monospace,monospace;color:#246a9e;margin:22px 0 12px}.divstory{background:#eaf6ff;border:2px solid #b9dcf3;border-radius:18px;padding:14px;margin:10px auto 12px;max-width:650px;min-height:58px;font-weight:850;line-height:1.45}.divrelation{color:#58738a;font-weight:750;min-height:28px;margin-bottom:10px}.divanswer{width:170px;height:72px;border:4px solid #62a9d8;border-radius:18px;text-align:center;font:950 40px ui-monospace,monospace;color:#194f75;background:#fff}.divanswer.activecell{box-shadow:0 0 0 6px #62a9d835}.divanswer.correct{background:#dff8e9;border-color:#35b776}.divanswer.wrong{background:#ffe4e4;border-color:#ef6666}@media(max-width:550px){.divpick{grid-template-columns:repeat(2,1fr)}}
+
     .multiply-panel{max-width:900px}.multablepick{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}.multablebtn{border:3px solid #d7e4cf;background:#fff;border-radius:20px;padding:18px 10px;cursor:pointer;font-size:20px;font-weight:900;color:#3e6d26;transition:.2s}.multablebtn:hover{transform:translateY(-3px);border-color:#68a746;background:#f4fff0}.multablebtn span{display:block;font-size:36px;margin-bottom:5px}.mulworkspace{text-align:center}.mulquestion{font:950 clamp(42px,9vw,72px)/1.1 ui-monospace,monospace;color:#3e6d26;margin:22px 0 12px}.mulmeaning{background:#eef9e9;border:2px solid #c7e5b9;border-radius:18px;padding:13px;margin:10px auto 16px;max-width:600px;min-height:58px;font-weight:800;line-height:1.45}.mulanswer{width:170px;height:72px;border:4px solid #8fc671;border-radius:18px;text-align:center;font:950 40px ui-monospace,monospace;color:#294b18;background:#fff}.mulanswer.activecell{box-shadow:0 0 0 6px #8fc67135}.mulanswer.correct{background:#dff8e9;border-color:#35b776}.mulanswer.wrong{background:#ffe4e4;border-color:#ef6666}@media(max-width:550px){.multablepick{grid-template-columns:repeat(2,1fr)}}
 
     .borrowrow{display:grid;grid-template-columns:42px 64px 64px;gap:7px;align-items:end;min-height:66px;margin-bottom:3px}.borrowlabel{font:800 10px system-ui;color:#b05a16;text-align:right;line-height:1.15}.borrowbox{display:flex;flex-direction:column;align-items:center;gap:3px}.borrowbox small{font:800 9px system-ui;color:#8a621f;text-align:center;white-space:nowrap}.borrowinput{width:52px;height:43px;border:3px dashed #f09a43;border-radius:11px;text-align:center;font:900 23px ui-monospace,monospace;color:#a94e13;background:#fff8e8}.borrowinput.activecell{border-color:#7048c8!important;border-style:solid;box-shadow:0 0 0 5px #7048c82d;background:#fff!important}.borrowinput.correct{background:#dff8e9;border-color:#35b776}.borrowinput.wrong{background:#ffe4e4;border-color:#ef6666}.subtraction-panel .modechip{background:#e6f7ff;color:#176589}.subtraction-panel .columncalc{border-color:#bfe2ee}.subtraction-panel .onesinput{border-color:#3197b7;background:#f1fbff}@media(max-width:550px){.borrowrow{grid-template-columns:38px 60px 60px}.borrowinput{width:50px}}
@@ -79,6 +82,40 @@
 
 
 
+
+
+  <section class="panel division-panel" id="divisionPanel">
+    <div class="gamehead"><button class="back" id="divBack">← Oyunlar</button><h2>➗ Sınırsız Bölme Atölyesi</h2></div>
+    <div id="divModeScreen">
+      <p class="infinite-note">Çalışmak istediğin bölme türünü seç. Yalnızca 20’ye kadar kalansız işlemler gelir ve sorular sen bırakana kadar devam eder.</p>
+      <div class="divpick">
+        <button class="divpickbtn" data-divisor="2"><span>2️⃣</span>2’ye Bölme</button>
+        <button class="divpickbtn" data-divisor="3"><span>3️⃣</span>3’e Bölme</button>
+        <button class="divpickbtn" data-divisor="4"><span>4️⃣</span>4’e Bölme</button>
+        <button class="divpickbtn" data-divisor="5"><span>5️⃣</span>5’e Bölme</button>
+        <button class="divpickbtn" data-divisor="mixed"><span>🎯</span>Karışık Çalışma</button>
+      </div>
+    </div>
+    <div id="divisionGame" hidden>
+      <div class="infostats"><div class="istat"><b id="divSolved">0</b>Çözülen</div><div class="istat"><b id="divCorrect">0</b>Doğru</div><div class="istat"><b id="divStreak">0</b>Seri</div><div class="istat"><b id="divScore">0</b>Puan</div></div>
+      <div class="divworkspace">
+        <span class="modechip" id="divModeName"></span>
+        <div class="divquestion" id="divQuestion">18 ÷ 3 = ?</div>
+        <div class="divstory" id="divStory"></div>
+        <div class="divrelation" id="divRelation">Bölümü bul ve tahtadan yaz.</div>
+        <input class="divanswer" id="divAnswer" inputmode="none" maxlength="2" readonly aria-label="Bölüm">
+      </div>
+      <div class="keypad" id="divNumberPad" aria-label="Bölme sayı tuşları">
+        <button class="keybtn" data-divdigit="1">1</button><button class="keybtn" data-divdigit="2">2</button><button class="keybtn" data-divdigit="3">3</button><button class="keybtn" data-divdigit="4">4</button><button class="keybtn" data-divdigit="5">5</button>
+        <button class="keybtn" data-divdigit="6">6</button><button class="keybtn" data-divdigit="7">7</button><button class="keybtn" data-divdigit="8">8</button><button class="keybtn" data-divdigit="9">9</button><button class="keybtn" data-divdigit="0">0</button>
+        <button class="keybtn erase" id="divErase">⌫ Cevabı Sil</button>
+      </div>
+      <div class="checkwrap"><button class="checkbtn" id="checkQuotient">Kontrol Et</button></div>
+      <div class="feedback" id="divFeedback" aria-live="polite"></div>
+      <div class="infinite-actions"><button class="continuebtn" id="nextDivision" hidden>Yeni Soru →</button><button class="stopbtn" id="stopDivision">Etkinliği Bitir</button></div>
+      <div class="sessionresult" id="divSessionResult" hidden></div>
+    </div>
+  </section>
 
   <section class="panel racepanel" id="mulRacePanel">
     <div class="gamehead"><button class="back" id="mulRaceBack">← Oyunlar</button><h2>🏎️ İki Kişilik Çarpma Yarışı</h2></div>
@@ -213,6 +250,7 @@ const G=[
  {id:'infinite-sub',icon:'➖',color:'#1488a8',title:'Sınırsız Çıkarma Atölyesi',desc:'Onluk bozmadan veya onluk bozarak iki basamaklı çıkarma seç; öğrendikçe yeni işlemler gelsin.',out:'İki basamaklı sayılarla sınırsız çıkarma alıştırması',subtraction:true,q:[]},
  {id:'multiplication-race',icon:'🏎️',color:'#5e9f3a',title:'İki Kişilik Çarpma Yarışı',desc:'İki oyuncu, birbirinden farklı 15 çarpma sorusunda arabalarını bağımsız yarıştırır.',out:'MAT.2.2.4–5 · 1’lerden 5’lere kadar çarpma',mulRace:true,q:[]},
  {id:'infinite-multiply',icon:'✖️',color:'#5e9f3a',title:'Sınırsız Çarpma Atölyesi',desc:'1’lerden 5’lere kadar istediğin çarpım tablosunu seç veya karışık çalış; sorular sen bırakana kadar devam etsin.',out:'MAT.2.2.4–5 · 10’a kadar olan sayıları 1, 2, 3, 4 ve 5 ile çarpma',multiply:true,q:[]},
+ {id:'infinite-division',icon:'➗',color:'#287fb7',title:'Sınırsız Bölme Atölyesi',desc:'2, 3, 4 veya 5’e bölmeyi seç ya da karışık çalış; 20’ye kadar kalansız işlemler sen bırakana kadar devam etsin.',out:'MAT.2.2.4–5 · 20’ye kadar 2, 3, 4 ve 5 ile kalansız bölme',division:true,q:[]},
  {id:'problem',icon:'🕵️',color:'#e26767',title:'Problem Çözme Dedektifi',desc:'Günlük yaşamda toplama ve çıkarma gerektiren iki aşamalı problemleri çöz.',out:'MAT.2.2.1',q:[
  ['Ece’nin 24, Ali’nin 18 çıkartması var. İkisi toplam kaç çıkartma eder?','🎟️ 24 + 18 = ?',42,[42,32,52,40]],
  ['Sepette 63 elma vardı. 27 elma satıldı. Kaç elma kaldı?','🍎 63 − 27 = ?',36,[36,46,34,40]],
@@ -258,7 +296,7 @@ const G=[
 ];
 const $=s=>document.querySelector(s);let game=null,pos=0,score=0,locked=false,total=Number(localStorage.getItem('iu-total')||0);$('#total').textContent=total;
 $('#cards').innerHTML=G.map((g,i)=>`<button class="card" style="--c:${g.color}" data-i="${i}"><div class="icon">${g.icon}</div><h2>${g.title}</h2><p>${g.desc}</p><span class="play">Oyuna Başla</span><div class="outcome">Öğrenme çıktısı: ${g.out}</div></button>`).join('');
-document.querySelectorAll('.card').forEach(b=>b.onclick=()=>{const g=G[+b.dataset.i];g.infinite?openInfinite():g.subtraction?openSubtraction():g.multiply?openMultiply():g.mulRace?openMulRace():g.subRace?openSubRace():g.race?openRace():start(g)});$('#back').onclick=home;$('#next').onclick=()=>{pos++;pos<game.q.length?render():finish()};
+document.querySelectorAll('.card').forEach(b=>b.onclick=()=>{const g=G[+b.dataset.i];g.infinite?openInfinite():g.subtraction?openSubtraction():g.multiply?openMultiply():g.division?openDivision():g.mulRace?openMulRace():g.subRace?openSubRace():g.race?openRace():start(g)});$('#back').onclick=home;$('#next').onclick=()=>{pos++;pos<game.q.length?render():finish()};
 function start(g){game=g;pos=score=0;$('#home').hidden=true;$('#panel').classList.add('on');$('#gameTitle').textContent=g.icon+' '+g.title;$('#result').hidden=true;$('#play').hidden=false;render();scrollTo({top:0,behavior:'smooth'})}
 function home(){$('#home').hidden=false;$('#panel').classList.remove('on');scrollTo({top:0,behavior:'smooth'})}
 function render(){locked=false;const [q,v,a,opts]=game.q[pos];$('#count').textContent=`Görev ${pos+1} / ${game.q.length}`;$('#gameScore').textContent=score;$('#bar').style.width=`${pos/game.q.length*100}%`;$('#question').textContent=q;$('#visual').textContent=v;$('#feedback').textContent='';$('#next').style.display='none';const shuffled=[...opts].sort(()=>Math.random()-.5);$('#answers').innerHTML=shuffled.map(x=>`<button class="answer"></button>`).join('');[...$('#answers').children].forEach((b,i)=>{b.textContent=shuffled[i];b.onclick=()=>choose(b,shuffled[i],a)})}
@@ -267,7 +305,7 @@ function finish(){$('#bar').style.width='100%';$('#play').hidden=true;$('#result
 
 let infMode='',infA=0,infB=0,infSolved=0,infCorrect=0,infStreak=0,infScore=0,infLocked=false,lastPair='',activeCalcField='onesInput';
 function openInfinite(){
-  $('#home').hidden=true;$('#panel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#infinitePanel').classList.add('on');
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#divisionPanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#infinitePanel').classList.add('on');
   $('#modeScreen').hidden=false;$('#infiniteGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
 }
 function closeInfinite(){
@@ -368,7 +406,7 @@ $('#stopInfinite').onclick=stopSession;
 
 let subMode='',subA=0,subB=0,subSolved=0,subCorrect=0,subStreak=0,subScore=0,subLocked=false,subLastPair='',activeSubField='subOnesInput';
 function openSubtraction(){
-  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#subtractionPanel').classList.add('on');
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#divisionPanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#subtractionPanel').classList.add('on');
   $('#subModeScreen').hidden=false;$('#subtractionGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
 }
 function closeSubtraction(){$('#subtractionPanel').classList.remove('on');$('#home').hidden=false;scrollTo({top:0,behavior:'smooth'})}
@@ -455,7 +493,7 @@ $('#checkDifference').onclick=checkSubtraction;$('#nextDifference').onclick=make
 
 let mulTable='mixed',mulA=1,mulB=1,mulSolved=0,mulCorrect=0,mulStreak=0,mulScore=0,mulLocked=false,mulLast='';
 function openMultiply(){
-  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#multiplyPanel').classList.add('on');
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#divisionPanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#multiplyPanel').classList.add('on');
   $('#mulModeScreen').hidden=false;$('#multiplyGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
 }
 function closeMultiply(){$('#multiplyPanel').classList.remove('on');$('#home').hidden=false;scrollTo({top:0,behavior:'smooth'})}
@@ -498,6 +536,51 @@ $('#mulBack').onclick=closeMultiply;document.querySelectorAll('[data-multable]')
 document.querySelectorAll('#mulNumberPad [data-muldigit]').forEach(b=>b.onclick=()=>putMulDigit(b.dataset.muldigit));$('#mulErase').onclick=()=>{$('#mulAnswer').value='';$('#mulAnswer').classList.remove('wrong','correct')};
 $('#checkProduct').onclick=checkMultiplication;$('#nextProduct').onclick=makeMultiplication;$('#stopMultiply').onclick=stopMultiply;
 
+
+
+let divMode='mixed',divDividend=0,divDivisor=2,divQuotient=0,divSolved=0,divCorrect=0,divStreak=0,divScore=0,divLocked=false,divLast='';
+function openDivision(){
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#divisionPanel').classList.add('on');
+  $('#divModeScreen').hidden=false;$('#divisionGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
+}
+function closeDivision(){$('#divisionPanel').classList.remove('on');$('#home').hidden=false;scrollTo({top:0,behavior:'smooth'})}
+function updateDivStats(){$('#divSolved').textContent=divSolved;$('#divCorrect').textContent=divCorrect;$('#divStreak').textContent=divStreak;$('#divScore').textContent=divScore}
+function beginDivision(mode){
+  divMode=mode;divSolved=divCorrect=divStreak=divScore=0;divLast='';
+  $('#divModeScreen').hidden=true;$('#divisionGame').hidden=false;$('#divSessionResult').hidden=true;
+  $('#divModeName').textContent=mode==='mixed'?'🎯 2, 3, 4 ve 5 ile Karışık':mode+'️⃣ '+mode+'’e Kalansız Bölme';updateDivStats();makeDivision();
+}
+function makeDivision(){
+  let divisor,quotient,dividend,key;
+  do{divisor=divMode==='mixed'?rand(2,5):Number(divMode);quotient=rand(1,Math.floor(20/divisor));dividend=divisor*quotient;key=dividend+'÷'+divisor}while(key===divLast);
+  divLast=key;divDividend=dividend;divDivisor=divisor;divQuotient=quotient;divLocked=false;
+  $('#divQuestion').textContent=dividend+' ÷ '+divisor+' = ?';
+  const sharing=Math.random()<.5;
+  $('#divStory').textContent=sharing?'🍎 '+dividend+' elmayı '+divisor+' eş gruba paylaştır. Her grupta kaç elma olur?':'🧺 '+dividend+' nesneyi '+divisor+'’şerli gruplandır. Kaç grup oluşur?';
+  $('#divRelation').textContent=sharing?'Eşit paylaştırma yap ve bir gruptaki sayıyı bul.':'Geriye '+divisor+'’şer sayabilir veya ardışık çıkarabilirsin.';
+  $('#divAnswer').value='';$('#divAnswer').disabled=false;$('#divAnswer').classList.remove('correct','wrong');$('#divAnswer').classList.add('activecell');
+  $('#divFeedback').textContent='';$('#checkQuotient').disabled=false;$('#nextDivision').hidden=true;document.querySelectorAll('#divNumberPad .keybtn').forEach(b=>b.disabled=false);
+}
+function putDivDigit(d){if(divLocked)return;const el=$('#divAnswer');if(el.value.length<2)el.value+=d;el.classList.remove('wrong','correct')}
+function checkDivision(){
+  if(divLocked)return;const raw=$('#divAnswer').value;if(raw===''){$('#divFeedback').textContent='Önce bölümü yazmalısın. ✏️';return}
+  divLocked=true;divSolved++;const ok=Number(raw)===divQuotient;$('#divAnswer').classList.add(ok?'correct':'wrong');
+  const check=divQuotient+' × '+divDivisor+' = '+divDividend;
+  if(ok){divCorrect++;divStreak++;const bonus=divStreak%5===0?5:0;divScore+=10+bonus;total+=10+bonus;localStorage.setItem('iu-total',total);$('#total').textContent=total;$('#divFeedback').textContent=(bonus?'🌟 Beş doğru seri! +15 puan. ':'🎉 Doğru! +10 puan. ')+'Kontrol: '+check}
+  else{divStreak=0;const steps=[];for(let n=divDividend;n>0;n-=divDivisor)steps.push(n+' − '+divDivisor+' = '+(n-divDivisor));$('#divFeedback').textContent='💡 Doğru bölüm '+divQuotient+'. '+steps.join(', ')+'. Kontrol: '+check}
+  $('#divAnswer').value=divQuotient;$('#divAnswer').disabled=true;$('#divAnswer').classList.remove('activecell');document.querySelectorAll('#divNumberPad .keybtn').forEach(b=>b.disabled=true);$('#checkQuotient').disabled=true;$('#nextDivision').hidden=false;updateDivStats();
+}
+function stopDivision(){
+  if(divSolved===0){closeDivision();return}
+  const pct=Math.round(divCorrect/divSolved*100);$('#divSessionResult').hidden=false;
+  $('#divSessionResult').innerHTML='<div class="big">'+(pct>=80?'🏆':pct>=50?'⭐':'🌱')+'</div><h3>Çalışma tamamlandı!</h3><p><b>'+divSolved+'</b> işlem çözdün, <b>'+divCorrect+'</b> doğru yaptın.<br>Başarı oranın: <b>%'+pct+'</b> · Puanın: <b>'+divScore+'</b></p><button class="continuebtn" id="sameDivMode">Aynı Bölümde Devam Et</button> <button class="back" id="changeDivMode">Bölen Seç</button>';
+  $('#divAnswer').disabled=true;document.querySelectorAll('#divNumberPad .keybtn').forEach(b=>b.disabled=true);$('#checkQuotient').disabled=true;$('#nextDivision').hidden=true;
+  $('#sameDivMode').onclick=()=>{divSolved=divCorrect=divStreak=divScore=0;$('#divSessionResult').hidden=true;updateDivStats();makeDivision()};
+  $('#changeDivMode').onclick=()=>{$('#divSessionResult').hidden=true;$('#divisionGame').hidden=true;$('#divModeScreen').hidden=false};
+}
+$('#divBack').onclick=closeDivision;document.querySelectorAll('[data-divisor]').forEach(b=>b.onclick=()=>beginDivision(b.dataset.divisor));
+document.querySelectorAll('#divNumberPad [data-divdigit]').forEach(b=>b.onclick=()=>putDivDigit(b.dataset.divdigit));$('#divErase').onclick=()=>{$('#divAnswer').value='';$('#divAnswer').classList.remove('wrong','correct')};
+$('#checkQuotient').onclick=checkDivision;$('#nextDivision').onclick=makeDivision;$('#stopDivision').onclick=stopDivision;
 
 let mulRaceQuestions=[[],[]],mulRaceIndex=[0,0],mulRacePos=[0,0],mulRaceCorrect=[0,0],mulRaceTime=[0,0],mulRaceAnswered=[false,false],mulRaceStartedAt=[0,0],mulRaceFinished=[false,false];
 function openMulRace(){
@@ -629,7 +712,7 @@ $('#subRaceBack').onclick=closeSubRace;$('#startSubRace').onclick=startSubRaceGa
 
 let raceQuestions=[[],[]],raceIndex=[0,0],racePos=[0,0],raceCorrect=[0,0],raceTime=[0,0],raceAnswered=[false,false],raceStartedAt=[0,0],raceFinished=[false,false];
 function openRace(){
-  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#racePanel').classList.add('on');
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#divisionPanel').classList.remove('on');$('#racePanel').classList.add('on');
   $('#raceIntro').hidden=false;$('#raceGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
 }
 function closeRace(){$('#racePanel').classList.remove('on');$('#home').hidden=false;scrollTo({top:0,behavior:'smooth'})}
