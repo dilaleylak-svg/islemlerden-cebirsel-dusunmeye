@@ -84,6 +84,25 @@
 
 
 
+
+  <section class="panel racepanel" id="divRacePanel">
+    <div class="gamehead"><button class="back" id="divRaceBack">← Oyunlar</button><h2>🏎️ İki Kişilik Bölme Yarışı</h2></div>
+    <div id="divRaceIntro" class="raceintro">
+      <p>Her oyuncu kendi kalansız bölme işlemlerini çözer ve rakibini beklemeden ilerler. Doğru cevap arabayı ileri, yanlış cevap geri götürür. İki taraf da 15 soruyu tamamlayınca önde olan kazanır!</p>
+      <div class="racerules"><div>➗ 2, 3, 4 ve 5’e bölme karışık</div><div>✅ Doğru: 1 adım ileri</div><div>❌ Yanlış: 1 adım geri</div></div>
+      <button class="startRaceBtn" id="startDivRace">Yarışı Başlat 🏁</button>
+    </div>
+    <div id="divRaceGame" hidden>
+      <div class="racehud"><span class="roundpill">İki ayrı soru yolu</span><b>🏁 Her oyuncuya 15 soru</b><span>Bölünen en fazla 20</span></div>
+      <div class="racetrack"><div class="finishline"></div><div class="lane"><span class="car" id="divCar1">🏎️</span></div><div class="lane"><span class="car" id="divCar2">🚙</span></div></div>
+      <div class="racers">
+        <div class="racerbox" style="--pc:#287fb7"><h3>🔵 1. Oyuncu</h3><div class="playerhead"><span class="roundpill" id="divRound1">Soru 1 / 15</span><b id="divRaceMode1"></b></div><div class="playerproblem" id="divOperation1">18 ÷ 3 = ?</div><div class="raceanswers" id="divAnswers1"></div><div class="racerstatus" id="divStatus1"></div></div>
+        <div class="racerbox" style="--pc:#d87938"><h3>🔴 2. Oyuncu</h3><div class="playerhead"><span class="roundpill" id="divRound2">Soru 1 / 15</span><b id="divRaceMode2"></b></div><div class="playerproblem" id="divOperation2">20 ÷ 5 = ?</div><div class="raceanswers" id="divAnswers2"></div><div class="racerstatus" id="divStatus2"></div></div>
+      </div>
+      <div class="raceend" id="divRaceEnd" hidden></div>
+    </div>
+  </section>
+
   <section class="panel division-panel" id="divisionPanel">
     <div class="gamehead"><button class="back" id="divBack">← Oyunlar</button><h2>➗ Sınırsız Bölme Atölyesi</h2></div>
     <div id="divModeScreen">
@@ -250,6 +269,7 @@ const G=[
  {id:'infinite-sub',icon:'➖',color:'#1488a8',title:'Sınırsız Çıkarma Atölyesi',desc:'Onluk bozmadan veya onluk bozarak iki basamaklı çıkarma seç; öğrendikçe yeni işlemler gelsin.',out:'İki basamaklı sayılarla sınırsız çıkarma alıştırması',subtraction:true,q:[]},
  {id:'multiplication-race',icon:'🏎️',color:'#5e9f3a',title:'İki Kişilik Çarpma Yarışı',desc:'İki oyuncu, birbirinden farklı 15 çarpma sorusunda arabalarını bağımsız yarıştırır.',out:'MAT.2.2.4–5 · 1’lerden 5’lere kadar çarpma',mulRace:true,q:[]},
  {id:'infinite-multiply',icon:'✖️',color:'#5e9f3a',title:'Sınırsız Çarpma Atölyesi',desc:'1’lerden 5’lere kadar istediğin çarpım tablosunu seç veya karışık çalış; sorular sen bırakana kadar devam etsin.',out:'MAT.2.2.4–5 · 10’a kadar olan sayıları 1, 2, 3, 4 ve 5 ile çarpma',multiply:true,q:[]},
+ {id:'division-race',icon:'🏎️',color:'#287fb7',title:'İki Kişilik Bölme Yarışı',desc:'İki oyuncu, ayrı 15 kalansız bölme sorusunda arabalarını birbirini beklemeden yarıştırır.',out:'MAT.2.2.4–5 · 20’ye kadar 2, 3, 4 ve 5 ile kalansız bölme',divRace:true,q:[]},
  {id:'infinite-division',icon:'➗',color:'#287fb7',title:'Sınırsız Bölme Atölyesi',desc:'2, 3, 4 veya 5’e bölmeyi seç ya da karışık çalış; 20’ye kadar kalansız işlemler sen bırakana kadar devam etsin.',out:'MAT.2.2.4–5 · 20’ye kadar 2, 3, 4 ve 5 ile kalansız bölme',division:true,q:[]},
  {id:'problem',icon:'🕵️',color:'#e26767',title:'Problem Çözme Dedektifi',desc:'Günlük yaşamda toplama ve çıkarma gerektiren iki aşamalı problemleri çöz.',out:'MAT.2.2.1',q:[
  ['Ece’nin 24, Ali’nin 18 çıkartması var. İkisi toplam kaç çıkartma eder?','🎟️ 24 + 18 = ?',42,[42,32,52,40]],
@@ -296,7 +316,7 @@ const G=[
 ];
 const $=s=>document.querySelector(s);let game=null,pos=0,score=0,locked=false,total=Number(localStorage.getItem('iu-total')||0);$('#total').textContent=total;
 $('#cards').innerHTML=G.map((g,i)=>`<button class="card" style="--c:${g.color}" data-i="${i}"><div class="icon">${g.icon}</div><h2>${g.title}</h2><p>${g.desc}</p><span class="play">Oyuna Başla</span><div class="outcome">Öğrenme çıktısı: ${g.out}</div></button>`).join('');
-document.querySelectorAll('.card').forEach(b=>b.onclick=()=>{const g=G[+b.dataset.i];g.infinite?openInfinite():g.subtraction?openSubtraction():g.multiply?openMultiply():g.division?openDivision():g.mulRace?openMulRace():g.subRace?openSubRace():g.race?openRace():start(g)});$('#back').onclick=home;$('#next').onclick=()=>{pos++;pos<game.q.length?render():finish()};
+document.querySelectorAll('.card').forEach(b=>b.onclick=()=>{const g=G[+b.dataset.i];g.infinite?openInfinite():g.subtraction?openSubtraction():g.multiply?openMultiply():g.division?openDivision():g.divRace?openDivRace():g.mulRace?openMulRace():g.subRace?openSubRace():g.race?openRace():start(g)});$('#back').onclick=home;$('#next').onclick=()=>{pos++;pos<game.q.length?render():finish()};
 function start(g){game=g;pos=score=0;$('#home').hidden=true;$('#panel').classList.add('on');$('#gameTitle').textContent=g.icon+' '+g.title;$('#result').hidden=true;$('#play').hidden=false;render();scrollTo({top:0,behavior:'smooth'})}
 function home(){$('#home').hidden=false;$('#panel').classList.remove('on');scrollTo({top:0,behavior:'smooth'})}
 function render(){locked=false;const [q,v,a,opts]=game.q[pos];$('#count').textContent=`Görev ${pos+1} / ${game.q.length}`;$('#gameScore').textContent=score;$('#bar').style.width=`${pos/game.q.length*100}%`;$('#question').textContent=q;$('#visual').textContent=v;$('#feedback').textContent='';$('#next').style.display='none';const shuffled=[...opts].sort(()=>Math.random()-.5);$('#answers').innerHTML=shuffled.map(x=>`<button class="answer"></button>`).join('');[...$('#answers').children].forEach((b,i)=>{b.textContent=shuffled[i];b.onclick=()=>choose(b,shuffled[i],a)})}
@@ -305,7 +325,7 @@ function finish(){$('#bar').style.width='100%';$('#play').hidden=true;$('#result
 
 let infMode='',infA=0,infB=0,infSolved=0,infCorrect=0,infStreak=0,infScore=0,infLocked=false,lastPair='',activeCalcField='onesInput';
 function openInfinite(){
-  $('#home').hidden=true;$('#panel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#divisionPanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#infinitePanel').classList.add('on');
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#divisionPanel').classList.remove('on');$('#divRacePanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#infinitePanel').classList.add('on');
   $('#modeScreen').hidden=false;$('#infiniteGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
 }
 function closeInfinite(){
@@ -406,7 +426,7 @@ $('#stopInfinite').onclick=stopSession;
 
 let subMode='',subA=0,subB=0,subSolved=0,subCorrect=0,subStreak=0,subScore=0,subLocked=false,subLastPair='',activeSubField='subOnesInput';
 function openSubtraction(){
-  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#divisionPanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#subtractionPanel').classList.add('on');
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#divisionPanel').classList.remove('on');$('#divRacePanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#subtractionPanel').classList.add('on');
   $('#subModeScreen').hidden=false;$('#subtractionGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
 }
 function closeSubtraction(){$('#subtractionPanel').classList.remove('on');$('#home').hidden=false;scrollTo({top:0,behavior:'smooth'})}
@@ -493,7 +513,7 @@ $('#checkDifference').onclick=checkSubtraction;$('#nextDifference').onclick=make
 
 let mulTable='mixed',mulA=1,mulB=1,mulSolved=0,mulCorrect=0,mulStreak=0,mulScore=0,mulLocked=false,mulLast='';
 function openMultiply(){
-  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#divisionPanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#multiplyPanel').classList.add('on');
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#divisionPanel').classList.remove('on');$('#divRacePanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#multiplyPanel').classList.add('on');
   $('#mulModeScreen').hidden=false;$('#multiplyGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
 }
 function closeMultiply(){$('#multiplyPanel').classList.remove('on');$('#home').hidden=false;scrollTo({top:0,behavior:'smooth'})}
@@ -537,6 +557,69 @@ document.querySelectorAll('#mulNumberPad [data-muldigit]').forEach(b=>b.onclick=
 $('#checkProduct').onclick=checkMultiplication;$('#nextProduct').onclick=makeMultiplication;$('#stopMultiply').onclick=stopMultiply;
 
 
+
+
+let divRaceQuestions=[[],[]],divRaceIndex=[0,0],divRacePos=[0,0],divRaceCorrect=[0,0],divRaceTime=[0,0],divRaceAnswered=[false,false],divRaceStartedAt=[0,0],divRaceFinished=[false,false];
+function openDivRace(){
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#divisionPanel').classList.remove('on');$('#divRacePanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#divRacePanel').classList.add('on');
+  $('#divRaceIntro').hidden=false;$('#divRaceGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
+}
+function closeDivRace(){$('#divRacePanel').classList.remove('on');$('#home').hidden=false;scrollTo({top:0,behavior:'smooth'})}
+function makeDivRaceSet(){
+  const divisors=[2,2,2,2,3,3,3,3,4,4,4,4,5,5,5].sort(()=>Math.random()-.5),used=new Set();
+  return divisors.map(divisor=>{let quotient,key;do{quotient=rand(1,Math.floor(20/divisor));key=divisor+'x'+quotient}while(used.has(key));used.add(key);return {dividend:divisor*quotient,divisor:divisor,answer:quotient}});
+}
+function buildDivRace(){
+  const first=makeDivRaceSet();let second,tries=0;
+  do{second=makeDivRaceSet();tries++}while(tries<80&&second.some((q,i)=>q.dividend===first[i].dividend&&q.divisor===first[i].divisor));
+  divRaceQuestions=[first,second];divRaceIndex=[0,0];divRacePos=[0,0];divRaceCorrect=[0,0];divRaceTime=[0,0];divRaceAnswered=[false,false];divRaceFinished=[false,false];
+}
+function divRaceOptions(answer){
+  const set=new Set([answer]),choices=[1,2,3,4,5,6,7,8,9,10].sort(()=>Math.random()-.5);
+  for(const v of choices){if(set.size>=4)break;set.add(v)}return [...set];
+}
+function updateDivRaceCars(finalWinner){
+  const p1=finalWinner===0?100:Math.min(91,divRacePos[0]/15*88+2),p2=finalWinner===1?100:Math.min(91,divRacePos[1]/15*88+2);
+  $('#divCar1').style.left=p1+'%';$('#divCar2').style.left=p2+'%';
+}
+function startDivRaceGame(){
+  buildDivRace();$('#divRaceIntro').hidden=true;$('#divRaceGame').hidden=false;$('#divRaceEnd').hidden=true;
+  document.querySelectorAll('#divRacePanel .racerbox').forEach(b=>b.classList.remove('finished'));updateDivRaceCars();renderDivRacePlayer(0);renderDivRacePlayer(1);
+}
+function renderDivRacePlayer(player){
+  if(divRaceIndex[player]>=15){finishDivRacePlayer(player);return}
+  const n=player+1,q=divRaceQuestions[player][divRaceIndex[player]],box=$('#divAnswers'+n);
+  divRaceAnswered[player]=false;divRaceStartedAt[player]=performance.now();
+  $('#divRound'+n).textContent='Soru '+(divRaceIndex[player]+1)+' / 15';$('#divRaceMode'+n).textContent=q.divisor+'’ye bölme';
+  $('#divOperation'+n).textContent=q.dividend+' ÷ '+q.divisor+' = ?';$('#divStatus'+n).textContent='Cevabını seç';
+  const shuffled=divRaceOptions(q.answer).sort(()=>Math.random()-.5);
+  box.innerHTML=shuffled.map(v=>'<button class="raceanswer">'+v+'</button>').join('');
+  [...box.children].forEach((btn,i)=>btn.onclick=()=>chooseDivRace(player,btn,shuffled[i],q.answer));
+}
+function chooseDivRace(player,btn,value,right){
+  if(divRaceAnswered[player]||divRaceFinished[player])return;divRaceAnswered[player]=true;divRaceTime[player]+=performance.now()-divRaceStartedAt[player];
+  const n=player+1,box=$('#divAnswers'+n);[...box.children].forEach(b=>{b.disabled=true;if(Number(b.textContent)===right)b.classList.add('good')});
+  if(value===right){divRaceCorrect[player]++;divRacePos[player]=Math.min(15,divRacePos[player]+1);btn.classList.add('good');$('#divStatus'+n).textContent='✅ İleri! Yeni soru geliyor.'}
+  else{divRacePos[player]=Math.max(0,divRacePos[player]-1);btn.classList.add('bad');$('#divStatus'+n).textContent='❌ Geri! Doğru: '+right}
+  updateDivRaceCars();setTimeout(()=>{divRaceIndex[player]++;renderDivRacePlayer(player)},650);
+}
+function finishDivRacePlayer(player){
+  if(divRaceFinished[player])return;divRaceFinished[player]=true;const n=player+1,box=$('#divAnswers'+n);
+  box.innerHTML='';$('#divRound'+n).textContent='15 / 15 tamamlandı';$('#divRaceMode'+n).textContent='🏁 Hazır';
+  $('#divOperation'+n).textContent='Soruların bitti!';$('#divStatus'+n).textContent=divRaceFinished[1-player]?'Sonuç hazırlanıyor…':'Rakibin devam ediyor.';
+  box.closest('.racerbox').classList.add('finished');if(divRaceFinished[0]&&divRaceFinished[1])finishDivRace();
+}
+function finishDivRace(){
+  let winner=-1;
+  if(divRacePos[0]!==divRacePos[1])winner=divRacePos[0]>divRacePos[1]?0:1;
+  else if(divRaceCorrect[0]!==divRaceCorrect[1])winner=divRaceCorrect[0]>divRaceCorrect[1]?0:1;
+  else if(Math.abs(divRaceTime[0]-divRaceTime[1])>100)winner=divRaceTime[0]<divRaceTime[1]?0:1;
+  updateDivRaceCars(winner);
+  const title=winner<0?'🤝 Yarış Berabere!':winner===0?'🔵 1. Oyuncu Kazandı!':'🔴 2. Oyuncu Kazandı!';
+  $('#divRaceEnd').hidden=false;$('#divRaceEnd').innerHTML='<h3>'+title+'</h3><div class="scorecompare"><div><b>'+divRaceCorrect[0]+'</b><small>1. Oyuncu doğru</small></div><div><b>'+divRaceCorrect[1]+'</b><small>2. Oyuncu doğru</small></div></div><p>Arabaların son konumu, doğru sayıları ve süreleri karşılaştırıldı.</p><button class="startRaceBtn" id="againDivRace">Tekrar Yarış 🏁</button> <button class="back" id="divRaceHome">Oyunlara Dön</button>';
+  $('#againDivRace').onclick=startDivRaceGame;$('#divRaceHome').onclick=closeDivRace;
+}
+$('#divRaceBack').onclick=closeDivRace;$('#startDivRace').onclick=startDivRaceGame;
 
 let divMode='mixed',divDividend=0,divDivisor=2,divQuotient=0,divSolved=0,divCorrect=0,divStreak=0,divScore=0,divLocked=false,divLast='';
 function openDivision(){
@@ -712,7 +795,7 @@ $('#subRaceBack').onclick=closeSubRace;$('#startSubRace').onclick=startSubRaceGa
 
 let raceQuestions=[[],[]],raceIndex=[0,0],racePos=[0,0],raceCorrect=[0,0],raceTime=[0,0],raceAnswered=[false,false],raceStartedAt=[0,0],raceFinished=[false,false];
 function openRace(){
-  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#divisionPanel').classList.remove('on');$('#racePanel').classList.add('on');
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#divisionPanel').classList.remove('on');$('#divRacePanel').classList.remove('on');$('#racePanel').classList.add('on');
   $('#raceIntro').hidden=false;$('#raceGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
 }
 function closeRace(){$('#racePanel').classList.remove('on');$('#home').hidden=false;scrollTo({top:0,behavior:'smooth'})}
