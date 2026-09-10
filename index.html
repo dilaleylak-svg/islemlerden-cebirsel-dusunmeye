@@ -19,6 +19,8 @@
     .digitinput[readonly],.carryinput[readonly]{cursor:pointer}.digitinput.activecell,.carryinput.activecell{border-color:#7048c8!important;box-shadow:0 0 0 5px #7048c82d;background:#fff!important}.keypad{width:min(360px,100%);margin:14px auto;display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.keybtn{border:0;background:#fff;box-shadow:0 4px 11px #33476620;border-bottom:4px solid #cfd8e7;border-radius:14px;padding:11px 5px;font-size:24px;font-weight:950;color:#26344a;cursor:pointer;touch-action:manipulation}.keybtn:hover:not(:disabled),.keybtn:active:not(:disabled){background:#eee9ff;border-color:#7652cf;transform:translateY(2px)}.keybtn.erase{grid-column:span 2;background:#fff0e5;color:#a14e1d;font-size:16px}.keybtn:disabled{opacity:.38;cursor:default}@media(max-width:550px){.keypad{gap:7px}.keybtn{font-size:22px;padding:10px 4px}}
 
     .racepanel{max-width:1050px}.raceintro{text-align:center}.racetrack{background:#d8f3d5;border:4px solid #627a53;border-radius:22px;padding:12px;margin:16px 0;position:relative;overflow:hidden}.lane{height:64px;position:relative;background:repeating-linear-gradient(90deg,#ece8df 0 55px,#fff 55px 62px);border-radius:13px;margin:8px 0;border:2px solid #aaa}.finishline{position:absolute;right:28px;top:8px;bottom:8px;width:20px;background:repeating-linear-gradient(0deg,#111 0 10px,#fff 10px 20px);opacity:.75}.car{position:absolute;left:2%;top:7px;font-size:39px;transition:left .65s cubic-bezier(.2,.8,.2,1);z-index:2}.lane:nth-child(2) .car{transform:scaleX(-1)}.racehud{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.roundpill{background:#eee9ff;color:#5839a5;border-radius:999px;padding:8px 14px;font-weight:900}.raceproblem{text-align:center;background:#fff8dd;border:3px solid #f0c751;border-radius:20px;padding:16px;margin:15px auto;max-width:440px}.raceproblem .operation{font:950 42px ui-monospace,monospace;margin:5px}.racers{display:grid;grid-template-columns:1fr 1fr;gap:18px}.racerbox{border:4px solid var(--pc);border-radius:22px;padding:16px;background:#fff}.racerbox h3{text-align:center;color:var(--pc);font-size:22px;margin:0 0 10px}.raceanswers{display:grid;grid-template-columns:1fr 1fr;gap:9px}.raceanswer{border:3px solid #dbe1ec;background:white;border-radius:15px;padding:13px;font-size:22px;font-weight:950;cursor:pointer}.raceanswer:hover:not(:disabled){border-color:var(--pc);background:#f5f2ff}.raceanswer.good{background:#dff8e9;border-color:#35b776}.raceanswer.bad{background:#ffe4e4;border-color:#ef6666}.racerstatus{text-align:center;min-height:28px;font-weight:850;margin-top:9px}.raceend{text-align:center;background:#fff6d8;border:3px solid #f1c34a;border-radius:23px;padding:24px;margin-top:16px}.raceend .trophy{font-size:65px}.racerules{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.racerules div{background:#fff;border-radius:16px;padding:14px;font-weight:800}.startRaceBtn{border:0;background:linear-gradient(135deg,#6a43c6,#e05c87);color:white;border-radius:17px;padding:14px 25px;font-size:19px;font-weight:950;cursor:pointer}@media(max-width:700px){.racers{grid-template-columns:1fr}.racerules{grid-template-columns:1fr}.raceproblem .operation{font-size:36px}.lane{height:56px}.car{font-size:34px}}
+
+    .playerhead{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px}.playerhead .roundpill{font-size:12px;padding:6px 9px}.playerhead b{font-size:12px}.playerproblem{text-align:center;background:#fff8dd;border:3px solid #f0c751;border-radius:17px;padding:13px;margin:8px 0 13px;font:950 32px ui-monospace,monospace}.racerbox.finished{background:#f0fff5;border-color:#35b776}.racerbox.finished .playerproblem{background:#dff8e9;border-color:#35b776;font-family:system-ui;font-size:20px}.racerbox.busy{box-shadow:0 0 0 5px color-mix(in srgb,var(--pc) 18%,transparent)}
   </style>
 </head>
 <body>
@@ -71,17 +73,16 @@
   <section class="panel racepanel" id="racePanel">
     <div class="gamehead"><button class="back" id="raceBack">← Oyunlar</button><h2>🏎️ İki Kişilik Toplama Yarışı</h2></div>
     <div id="raceIntro" class="raceintro">
-      <p>İki oyuncu aynı işlemi çözer. Doğru cevap arabayı ileri, yanlış cevap geri götürür. 15 turun sonunda önde olan kazanır!</p>
+      <p>Her oyuncu kendi farklı işlemlerini çözer ve rakibini beklemeden ilerler. Doğru cevap arabayı ileri, yanlış cevap geri götürür. İki taraf da 15 soruyu tamamlayınca önde olan kazanır!</p>
       <div class="racerules"><div>➕ Eldeli ve eldesiz karışık</div><div>✅ Doğru: 1 adım ileri</div><div>❌ Yanlış: 1 adım geri</div></div>
       <button class="startRaceBtn" id="startRace">Yarışı Başlat 🏁</button>
     </div>
     <div id="raceGame" hidden>
-      <div class="racehud"><span class="roundpill" id="raceRound">Tur 1 / 15</span><b id="raceMode">Eldeli toplama</b><span>🏁 15 turluk yarış</span></div>
+      <div class="racehud"><span class="roundpill">İki ayrı soru yolu</span><b>🏁 Her oyuncuya 15 soru</b><span>Beklemek yok!</span></div>
       <div class="racetrack"><div class="finishline"></div><div class="lane"><span class="car" id="car1">🏎️</span></div><div class="lane"><span class="car" id="car2">🚙</span></div></div>
-      <div class="raceproblem"><small>İŞLEMİ ÇÖZ</small><div class="operation" id="raceOperation">24 + 35 = ?</div></div>
       <div class="racers">
-        <div class="racerbox" style="--pc:#347bc1"><h3>🔵 1. Oyuncu</h3><div class="raceanswers" id="answers1"></div><div class="racerstatus" id="status1"></div></div>
-        <div class="racerbox" style="--pc:#df537d"><h3>🔴 2. Oyuncu</h3><div class="raceanswers" id="answers2"></div><div class="racerstatus" id="status2"></div></div>
+        <div class="racerbox" style="--pc:#347bc1"><h3>🔵 1. Oyuncu</h3><div class="playerhead"><span class="roundpill" id="round1">Soru 1 / 15</span><b id="mode1"></b></div><div class="playerproblem" id="operation1">24 + 35 = ?</div><div class="raceanswers" id="answers1"></div><div class="racerstatus" id="status1"></div></div>
+        <div class="racerbox" style="--pc:#df537d"><h3>🔴 2. Oyuncu</h3><div class="playerhead"><span class="roundpill" id="round2">Soru 1 / 15</span><b id="mode2"></b></div><div class="playerproblem" id="operation2">31 + 48 = ?</div><div class="raceanswers" id="answers2"></div><div class="racerstatus" id="status2"></div></div>
       </div>
       <div class="raceend" id="raceEnd" hidden></div>
     </div>
@@ -244,7 +245,7 @@ $('#checkSum').onclick=checkInfinite;
 $('#nextSum').onclick=makeAddition;
 $('#stopInfinite').onclick=stopSession;
 
-let raceQuestions=[],raceIndex=0,racePos=[0,0],raceCorrect=[0,0],raceTime=[0,0],raceAnswered=[false,false],raceStartedAt=0;
+let raceQuestions=[[],[]],raceIndex=[0,0],racePos=[0,0],raceCorrect=[0,0],raceTime=[0,0],raceAnswered=[false,false],raceStartedAt=[0,0],raceFinished=[false,false];
 function openRace(){
   $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#racePanel').classList.add('on');
   $('#raceIntro').hidden=false;$('#raceGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
@@ -252,19 +253,19 @@ function openRace(){
 function closeRace(){$('#racePanel').classList.remove('on');$('#home').hidden=false;scrollTo({top:0,behavior:'smooth'})}
 function raceAddition(carry){
   let a,b;
-  if(carry){
-    const at=rand(1,7),bt=rand(1,8-at),au=rand(1,9),bu=rand(10-au,9);a=at*10+au;b=bt*10+bu;
-  }else{
-    const at=rand(1,8),bt=rand(1,9-at),au=rand(0,9),bu=rand(0,9-au);a=at*10+au;b=bt*10+bu;
-  }
+  if(carry){const at=rand(1,7),bt=rand(1,8-at),au=rand(1,9),bu=rand(10-au,9);a=at*10+au;b=bt*10+bu}
+  else{const at=rand(1,8),bt=rand(1,9-at),au=rand(0,9),bu=rand(0,9-au);a=at*10+au;b=bt*10+bu}
   return {a:a,b:b,answer:a+b,carry:carry};
 }
+function makeRaceSet(used){
+  const modes=[];for(let i=0;i<7;i++)modes.push(false);for(let i=0;i<8;i++)modes.push(true);modes.sort(()=>Math.random()-.5);
+  return modes.map(carry=>{let q,key;do{q=raceAddition(carry);key=q.a+'+'+q.b}while(used.has(key));used.add(key);return q});
+}
 function buildRace(){
-  const modes=[];for(let i=0;i<7;i++)modes.push(false);for(let i=0;i<8;i++)modes.push(true);
-  modes.sort(()=>Math.random()-.5);raceQuestions=modes.map(raceAddition);raceIndex=0;racePos=[0,0];raceCorrect=[0,0];raceTime=[0,0];
+  const used=new Set();raceQuestions=[makeRaceSet(used),makeRaceSet(used)];raceIndex=[0,0];racePos=[0,0];raceCorrect=[0,0];raceTime=[0,0];raceAnswered=[false,false];raceFinished=[false,false];
 }
 function raceOptions(answer){
-  const set=new Set([answer]);const shifts=[-10,10,-1,1,-9,9,-11,11];
+  const set=new Set([answer]),shifts=[-10,10,-1,1,-9,9,-11,11];
   while(set.size<4){const v=answer+shifts[rand(0,shifts.length-1)];if(v>=10&&v<=99)set.add(v)}
   return [...set];
 }
@@ -272,25 +273,34 @@ function updateCars(finalWinner){
   const p1=finalWinner===0?100:Math.min(91,racePos[0]/15*88+2),p2=finalWinner===1?100:Math.min(91,racePos[1]/15*88+2);
   $('#car1').style.left=p1+'%';$('#car2').style.left=p2+'%';
 }
-function startRaceGame(){buildRace();$('#raceIntro').hidden=true;$('#raceGame').hidden=false;$('#raceEnd').hidden=true;updateCars();renderRace()}
-function renderRace(){
-  const q=raceQuestions[raceIndex];raceAnswered=[false,false];raceStartedAt=performance.now();
-  $('#raceRound').textContent='Tur '+(raceIndex+1)+' / 15';$('#raceMode').textContent=q.carry?'🚀 Eldeli toplama':'🟢 Eldesiz toplama';$('#raceOperation').textContent=q.a+' + '+q.b+' = ?';
-  $('#status1').textContent='Cevabını seç';$('#status2').textContent='Cevabını seç';
-  const opts=raceOptions(q.answer);
-  [1,2].forEach(n=>{
-    const shuffled=[...opts].sort(()=>Math.random()-.5),box=$('#answers'+n);
-    box.innerHTML=shuffled.map(v=>'<button class="raceanswer">'+v+'</button>').join('');
-    [...box.children].forEach((btn,i)=>btn.onclick=()=>raceChoose(n-1,btn,shuffled[i],q.answer));
-  });
+function startRaceGame(){
+  buildRace();$('#raceIntro').hidden=true;$('#raceGame').hidden=false;$('#raceEnd').hidden=true;
+  document.querySelectorAll('.racerbox').forEach(b=>b.classList.remove('finished'));updateCars();renderPlayer(0);renderPlayer(1);
+}
+function renderPlayer(player){
+  if(raceIndex[player]>=15){finishPlayer(player);return}
+  const n=player+1,q=raceQuestions[player][raceIndex[player]],box=$('#answers'+n);
+  raceAnswered[player]=false;raceStartedAt[player]=performance.now();
+  $('#round'+n).textContent='Soru '+(raceIndex[player]+1)+' / 15';$('#mode'+n).textContent=q.carry?'🚀 Eldeli':'🟢 Eldesiz';
+  $('#operation'+n).textContent=q.a+' + '+q.b+' = ?';$('#status'+n).textContent='Cevabını seç';
+  const shuffled=raceOptions(q.answer).sort(()=>Math.random()-.5);
+  box.innerHTML=shuffled.map(v=>'<button class="raceanswer">'+v+'</button>').join('');
+  [...box.children].forEach((btn,i)=>btn.onclick=()=>raceChoose(player,btn,shuffled[i],q.answer));
 }
 function raceChoose(player,btn,value,right){
-  if(raceAnswered[player])return;raceAnswered[player]=true;raceTime[player]+=performance.now()-raceStartedAt;
-  const box=$('#answers'+(player+1));[...box.children].forEach(b=>{b.disabled=true;if(Number(b.textContent)===right)b.classList.add('good')});
-  if(value===right){raceCorrect[player]++;racePos[player]=Math.min(15,racePos[player]+1);btn.classList.add('good');$('#status'+(player+1)).textContent='✅ İleri! Konum: '+racePos[player]}
-  else{racePos[player]=Math.max(0,racePos[player]-1);btn.classList.add('bad');$('#status'+(player+1)).textContent='❌ Geri! Doğru: '+right}
+  if(raceAnswered[player]||raceFinished[player])return;raceAnswered[player]=true;raceTime[player]+=performance.now()-raceStartedAt[player];
+  const n=player+1,box=$('#answers'+n);[...box.children].forEach(b=>{b.disabled=true;if(Number(b.textContent)===right)b.classList.add('good')});
+  if(value===right){raceCorrect[player]++;racePos[player]=Math.min(15,racePos[player]+1);btn.classList.add('good');$('#status'+n).textContent='✅ İleri! Yeni soru geliyor.'}
+  else{racePos[player]=Math.max(0,racePos[player]-1);btn.classList.add('bad');$('#status'+n).textContent='❌ Geri! Doğru: '+right}
   updateCars();
-  if(raceAnswered[0]&&raceAnswered[1])setTimeout(()=>{raceIndex++;raceIndex<15?renderRace():finishRace()},900);
+  setTimeout(()=>{raceIndex[player]++;renderPlayer(player)},650);
+}
+function finishPlayer(player){
+  if(raceFinished[player])return;raceFinished[player]=true;const n=player+1,box=$('#answers'+n);
+  box.innerHTML='';$('#round'+n).textContent='15 / 15 tamamlandı';$('#mode'+n).textContent='🏁 Hazır';
+  $('#operation'+n).textContent='Soruların bitti!';$('#status'+n).textContent=raceFinished[1-player]?'Sonuç hazırlanıyor…':'Rakibin devam ediyor.';
+  box.closest('.racerbox').classList.add('finished');
+  if(raceFinished[0]&&raceFinished[1])finishRace();
 }
 function finishRace(){
   let winner=-1;
@@ -298,7 +308,6 @@ function finishRace(){
   else if(raceCorrect[0]!==raceCorrect[1])winner=raceCorrect[0]>raceCorrect[1]?0:1;
   else if(Math.abs(raceTime[0]-raceTime[1])>100)winner=raceTime[0]<raceTime[1]?0:1;
   updateCars(winner);
-  document.querySelectorAll('.raceanswer').forEach(b=>b.disabled=true);
   const title=winner<0?'🤝 Yarış Berabere!':winner===0?'🔵 1. Oyuncu Kazandı!':'🔴 2. Oyuncu Kazandı!';
   $('#raceEnd').hidden=false;
   $('#raceEnd').innerHTML='<div class="trophy">🏆</div><h2>'+title+'</h2><p>1. Oyuncu: <b>'+raceCorrect[0]+' doğru</b>, konum '+racePos[0]+'<br>2. Oyuncu: <b>'+raceCorrect[1]+' doğru</b>, konum '+racePos[1]+'</p><button class="startRaceBtn" id="raceAgain">Tekrar Yarış 🏁</button>';
