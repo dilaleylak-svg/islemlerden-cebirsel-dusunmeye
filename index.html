@@ -15,6 +15,8 @@
     .modepick{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}.modebtn{border:3px solid #d9deeb;background:#fff;border-radius:22px;padding:24px 14px;cursor:pointer;text-align:center;font-weight:900;font-size:20px;transition:.2s}.modebtn:hover{transform:translateY(-3px);border-color:var(--purple)}.modebtn span{display:block;font-size:44px;margin-bottom:8px}.modebtn small{display:block;font-size:13px;color:#68768c;margin-top:7px}.infostats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:16px 0}.istat{background:#f3f0ff;border-radius:14px;padding:10px;text-align:center}.istat b{display:block;font-size:22px;color:#5937ad}.vertical{width:210px;margin:20px auto;background:#fff;border:3px solid #e1daf6;border-radius:22px;padding:18px 28px;font:900 44px/1.05 ui-monospace,monospace;text-align:right;box-shadow:0 8px 20px #5b459c18}.vertical .sign{float:left}.vertical .line{border-top:4px solid #26344a;margin-top:7px;padding-top:7px}.carryhint{font-size:13px;color:#6d5fa0;text-align:center;min-height:20px}.numberentry{display:flex;gap:10px;justify-content:center;align-items:center;margin:15px auto}.numberentry input{width:190px;border:3px solid #cfd7e7;border-radius:16px;padding:13px;text-align:center;font-size:28px;font-weight:900;color:var(--ink)}.numberentry input:focus{outline:none;border-color:var(--purple)}.checkbtn,.stopbtn,.continuebtn{border:0;border-radius:15px;padding:13px 19px;font-weight:900;cursor:pointer}.checkbtn,.continuebtn{background:var(--purple);color:#fff}.stopbtn{background:#ffe4e4;color:#a32e42}.infinite-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.sessionresult{text-align:center;background:#f5f2ff;border-radius:20px;padding:22px;margin-top:15px}.sessionresult .big{font-size:58px}.infinite-note{text-align:center;color:#66758a;line-height:1.5}.modechip{display:inline-block;background:#fff1c9;color:#7b5510;border-radius:999px;padding:6px 11px;font-weight:900;font-size:13px}@media(max-width:550px){.modepick{grid-template-columns:1fr}.infostats{grid-template-columns:1fr 1fr}.vertical{font-size:38px;width:190px}.numberentry{flex-direction:column}}
 
     .columncalc{width:250px;margin:20px auto;background:#fff;border:3px solid #e1daf6;border-radius:24px;padding:16px 30px 20px;box-shadow:0 8px 20px #5b459c18;font-family:ui-monospace,monospace}.placeheads,.calcrow,.answerrow,.carryrow{display:grid;grid-template-columns:42px 64px 64px;gap:7px;align-items:center}.placeheads{font:800 11px system-ui;color:#7a6ca4;text-align:center;margin-bottom:4px}.calcrow{font-size:44px;font-weight:900;text-align:center;line-height:1.1}.calcrow .op{font-size:35px}.calcline{border-top:4px solid #26344a;margin:8px 0 9px}.digitinput{width:64px;height:62px;border:3px solid #cfd7e7;border-radius:14px;text-align:center;font:900 34px ui-monospace,monospace;color:var(--ink);background:#fff}.digitinput:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 4px #7048c820}.onesinput{border-color:#8f75d6;background:#faf8ff}.carryrow{min-height:47px;margin-bottom:4px}.carrylabel{font:800 11px system-ui;color:#7652cf;text-align:right}.carryinput{width:42px;height:40px;justify-self:center;border:3px dashed #f09a43;border-radius:11px;text-align:center;font:900 23px ui-monospace,monospace;color:#b05a16;background:#fff8e8}.carryinput:focus{outline:none;border-style:solid;box-shadow:0 0 0 4px #ffb34b25}.answerrow{position:relative}.answerrow:before{content:"=";font:900 25px system-ui;text-align:center;color:#526174}.column-guide{text-align:center;font-size:13px;color:#6c608c;font-weight:750;min-height:22px}.checkwrap{text-align:center;margin:14px 0}.digitinput.correct,.carryinput.correct{background:#dff8e9;border-color:#35b776}.digitinput.wrong,.carryinput.wrong{background:#ffe4e4;border-color:#ef6666}@media(max-width:550px){.columncalc{width:225px;padding-left:20px;padding-right:20px}.placeheads,.calcrow,.answerrow,.carryrow{grid-template-columns:38px 60px 60px}.digitinput{width:60px}}
+
+    .digitinput[readonly],.carryinput[readonly]{cursor:pointer}.digitinput.activecell,.carryinput.activecell{border-color:#7048c8!important;box-shadow:0 0 0 5px #7048c82d;background:#fff!important}.keypad{width:min(360px,100%);margin:14px auto;display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.keybtn{border:0;background:#fff;box-shadow:0 4px 11px #33476620;border-bottom:4px solid #cfd8e7;border-radius:14px;padding:11px 5px;font-size:24px;font-weight:950;color:#26344a;cursor:pointer;touch-action:manipulation}.keybtn:hover:not(:disabled),.keybtn:active:not(:disabled){background:#eee9ff;border-color:#7652cf;transform:translateY(2px)}.keybtn.erase{grid-column:span 2;background:#fff0e5;color:#a14e1d;font-size:16px}.keybtn:disabled{opacity:.38;cursor:default}@media(max-width:550px){.keypad{gap:7px}.keybtn{font-size:22px;padding:10px 4px}}
   </style>
 </head>
 <body>
@@ -45,13 +47,18 @@
       <div style="text-align:center"><span class="modechip" id="modeName"></span></div>
       <div class="columncalc">
         <div class="placeheads"><span></span><span>ONLAR</span><span>BİRLER</span></div>
-        <div class="carryrow" id="carryWrap"><span class="carrylabel">ELDE</span><input class="carryinput" id="carryInput" inputmode="numeric" maxlength="1" aria-label="Elde"></div>
+        <div class="carryrow" id="carryWrap"><span class="carrylabel">ELDE</span><input class="carryinput" id="carryInput" inputmode="none" maxlength="1" readonly aria-label="Elde"></div>
         <div class="calcrow"><span></span><span id="aTens">0</span><span id="aOnes">0</span></div>
         <div class="calcrow"><span class="op">+</span><span id="bTens">0</span><span id="bOnes">0</span></div>
         <div class="calcline"></div>
-        <div class="answerrow"><span></span><input class="digitinput" id="tensInput" inputmode="numeric" maxlength="1" aria-label="Sonucun onlar basamağı"><input class="digitinput onesinput" id="onesInput" inputmode="numeric" maxlength="1" aria-label="Sonucun birler basamağı"></div>
+        <div class="answerrow"><span></span><input class="digitinput" id="tensInput" inputmode="none" maxlength="1" readonly aria-label="Sonucun onlar basamağı"><input class="digitinput onesinput" id="onesInput" inputmode="none" maxlength="1" readonly aria-label="Sonucun birler basamağı"></div>
       </div>
       <div class="column-guide" id="carryHint"></div>
+      <div class="keypad" id="numberPad" aria-label="Sayı tuşları">
+        <button class="keybtn" data-digit="1">1</button><button class="keybtn" data-digit="2">2</button><button class="keybtn" data-digit="3">3</button><button class="keybtn" data-digit="4">4</button><button class="keybtn" data-digit="5">5</button>
+        <button class="keybtn" data-digit="6">6</button><button class="keybtn" data-digit="7">7</button><button class="keybtn" data-digit="8">8</button><button class="keybtn" data-digit="9">9</button><button class="keybtn" data-digit="0">0</button>
+        <button class="keybtn erase" id="eraseDigit">⌫ Seçili Kutuyu Sil</button>
+      </div>
       <div class="checkwrap"><button class="checkbtn" id="checkSum">Kontrol Et</button></div>
       <div class="feedback" id="infFeedback" aria-live="polite"></div>
       <div class="infinite-actions"><button class="continuebtn" id="nextSum" hidden>Yeni Soru →</button><button class="stopbtn" id="stopInfinite">Oyunu Bitir</button></div>
@@ -115,7 +122,7 @@ function render(){locked=false;const [q,v,a,opts]=game.q[pos];$('#count').textCo
 function choose(btn,val,ans){if(locked)return;locked=true;document.querySelectorAll('.answer').forEach(b=>{b.disabled=true;if(String(b.textContent)===String(ans))b.classList.add('good')});if(String(val)===String(ans)){btn.classList.add('good');score+=10;total+=10;localStorage.setItem('iu-total',total);$('#total').textContent=total;$('#feedback').textContent='🎉 Harika! 10 puan kazandın.'}else{btn.classList.add('bad');$('#feedback').textContent=`💡 Doğru cevap: ${ans}`}$('#gameScore').textContent=score;$('#next').textContent=pos===game.q.length-1?'Sonucu gör 🏆':'Sonraki görev →';$('#next').style.display='block'}
 function finish(){$('#bar').style.width='100%';$('#play').hidden=true;$('#result').hidden=false;const ratio=score/(game.q.length*10),stars=ratio>=.84?'⭐⭐⭐':ratio>=.5?'⭐⭐':'⭐';$('#result').innerHTML=`<div class="stars">${stars}</div><h3>Görev tamamlandı!</h3><p><b>${score}</b> puan kazandın. ${ratio>=.84?'Bu konuda ustasın!':'Bir kez daha oynarsan daha da güçleneceksin!'}</p><button class="again" onclick="start(game)">Tekrar Oyna</button><button class="again" onclick="home()">Diğer Oyunlar</button>`}
 
-let infMode='',infA=0,infB=0,infSolved=0,infCorrect=0,infStreak=0,infScore=0,infLocked=false,lastPair='';
+let infMode='',infA=0,infB=0,infSolved=0,infCorrect=0,infStreak=0,infScore=0,infLocked=false,lastPair='',activeCalcField='onesInput';
 function openInfinite(){
   $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.add('on');
   $('#modeScreen').hidden=false;$('#infiniteGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
@@ -144,7 +151,7 @@ function makeAddition(){
   $('#carryWrap').hidden=infMode!=='carry';$('#checkSum').disabled=false;
   $('#nextSum').hidden=true;$('#infFeedback').textContent='';
   $('#carryHint').textContent=infMode==='carry'?'1. Birleri topla, sonucu birlere yaz. 2. Eldeyi kutusuna yaz. 3. Onları topla.':'1. Birleri topla ve birlere yaz. 2. Onları topla ve onlar basamağına yaz.';
-  setTimeout(()=>$('#onesInput').focus(),50);
+  document.querySelectorAll('.keybtn').forEach(b=>b.disabled=false);setTimeout(()=>selectCalcField('onesInput'),50);
 }
 function updateInfStats(){
   $('#infSolved').textContent=infSolved;$('#infCorrect').textContent=infCorrect;$('#infStreak').textContent=infStreak;$('#infScore').textContent=infScore;
@@ -181,6 +188,7 @@ function checkInfinite(){
   }
   $('#onesInput').value=rightOnes;$('#tensInput').value=rightTens;if(infMode==='carry')$('#carryInput').value=1;
   ['#onesInput','#tensInput','#carryInput'].forEach(id=>$(id).disabled=true);
+  document.querySelectorAll('.keybtn').forEach(b=>b.disabled=true);document.querySelectorAll('.digitinput,.carryinput').forEach(el=>el.classList.remove('activecell'));
   $('#checkSum').disabled=true;$('#nextSum').hidden=false;updateInfStats();
 }
 function stopSession(){
@@ -188,17 +196,28 @@ function stopSession(){
   const pct=Math.round(infCorrect/infSolved*100);
   $('#sessionResult').hidden=false;
   $('#sessionResult').innerHTML='<div class="big">'+(pct>=80?'🏆':pct>=50?'⭐':'🌱')+'</div><h3>Çalışma tamamlandı!</h3><p><b>'+infSolved+'</b> soru çözdün, <b>'+infCorrect+'</b> doğru yaptın.<br>Başarı oranın: <b>%'+pct+'</b> · Puanın: <b>'+infScore+'</b></p><button class="continuebtn" id="sameMode">Aynı Modda Devam Et</button> <button class="back" id="changeMode">Mod Seç</button>';
-  ['#onesInput','#tensInput','#carryInput'].forEach(id=>$(id).disabled=true);$('#checkSum').disabled=true;$('#nextSum').hidden=true;
+  ['#onesInput','#tensInput','#carryInput'].forEach(id=>$(id).disabled=true);document.querySelectorAll('.keybtn').forEach(b=>b.disabled=true);$('#checkSum').disabled=true;$('#nextSum').hidden=true;
   $('#sameMode').onclick=()=>{infSolved=infCorrect=infStreak=infScore=0;$('#sessionResult').hidden=true;updateInfStats();makeAddition()};
   $('#changeMode').onclick=()=>{$('#sessionResult').hidden=true;$('#infiniteGame').hidden=true;$('#modeScreen').hidden=false};
 }
 $('#infBack').onclick=closeInfinite;
 document.querySelectorAll('.modebtn').forEach(b=>b.onclick=()=>beginMode(b.dataset.mode));
-function onlyDigit(el){el.value=el.value.replace(/\D/g,'').slice(0,1)}
-$('#onesInput').addEventListener('input',e=>{onlyDigit(e.target);if(e.target.value)(infMode==='carry'?$('#carryInput'):$('#tensInput')).focus()});
-$('#carryInput').addEventListener('input',e=>{onlyDigit(e.target);if(e.target.value)$('#tensInput').focus()});
-$('#tensInput').addEventListener('input',e=>onlyDigit(e.target));
-['#onesInput','#carryInput','#tensInput'].forEach(id=>$(id).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();infLocked?makeAddition():checkInfinite()}}));
+function selectCalcField(id){
+  const el=document.getElementById(id);if(!el||el.disabled||el.closest('[hidden]'))return;
+  activeCalcField=id;document.querySelectorAll('.digitinput,.carryinput').forEach(x=>x.classList.remove('activecell'));el.classList.add('activecell');el.focus({preventScroll:true});
+}
+function nextCalcField(id){
+  if(id==='onesInput')return infMode==='carry'?'carryInput':'tensInput';
+  if(id==='carryInput')return 'tensInput';
+  return 'tensInput';
+}
+function putDigit(d){
+  if(infLocked)return;const el=document.getElementById(activeCalcField);if(!el||el.disabled)return;
+  el.value=d;el.classList.remove('wrong','correct');selectCalcField(nextCalcField(activeCalcField));
+}
+['onesInput','carryInput','tensInput'].forEach(id=>document.getElementById(id).onclick=()=>selectCalcField(id));
+document.querySelectorAll('[data-digit]').forEach(b=>b.onclick=()=>putDigit(b.dataset.digit));
+$('#eraseDigit').onclick=()=>{const el=document.getElementById(activeCalcField);if(el&&!el.disabled){el.value='';el.classList.remove('wrong','correct');selectCalcField(activeCalcField)}};
 $('#checkSum').onclick=checkInfinite;
 $('#nextSum').onclick=makeAddition;
 $('#stopInfinite').onclick=stopSession;
