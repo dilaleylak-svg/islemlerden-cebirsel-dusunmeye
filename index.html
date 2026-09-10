@@ -79,6 +79,25 @@
 
 
 
+
+  <section class="panel racepanel" id="mulRacePanel">
+    <div class="gamehead"><button class="back" id="mulRaceBack">← Oyunlar</button><h2>🏎️ İki Kişilik Çarpma Yarışı</h2></div>
+    <div id="mulRaceIntro" class="raceintro">
+      <p>Her oyuncu kendi farklı çarpma işlemlerini çözer ve rakibini beklemeden ilerler. Doğru cevap arabayı ileri, yanlış cevap geri götürür. İki taraf da 15 soruyu tamamlayınca önde olan kazanır!</p>
+      <div class="racerules"><div>✖️ 1’lerden 5’lere kadar karışık</div><div>✅ Doğru: 1 adım ileri</div><div>❌ Yanlış: 1 adım geri</div></div>
+      <button class="startRaceBtn" id="startMulRace">Yarışı Başlat 🏁</button>
+    </div>
+    <div id="mulRaceGame" hidden>
+      <div class="racehud"><span class="roundpill">İki ayrı soru yolu</span><b>🏁 Her oyuncuya 15 soru</b><span>En büyük sonuç: 50</span></div>
+      <div class="racetrack"><div class="finishline"></div><div class="lane"><span class="car" id="mulCar1">🏎️</span></div><div class="lane"><span class="car" id="mulCar2">🚙</span></div></div>
+      <div class="racers">
+        <div class="racerbox" style="--pc:#5e9f3a"><h3>🔵 1. Oyuncu</h3><div class="playerhead"><span class="roundpill" id="mulRound1">Soru 1 / 15</span><b id="mulRaceMode1"></b></div><div class="playerproblem" id="mulOperation1">3 × 7 = ?</div><div class="raceanswers" id="mulAnswers1"></div><div class="racerstatus" id="mulStatus1"></div></div>
+        <div class="racerbox" style="--pc:#e28a2d"><h3>🔴 2. Oyuncu</h3><div class="playerhead"><span class="roundpill" id="mulRound2">Soru 1 / 15</span><b id="mulRaceMode2"></b></div><div class="playerproblem" id="mulOperation2">5 × 6 = ?</div><div class="raceanswers" id="mulAnswers2"></div><div class="racerstatus" id="mulStatus2"></div></div>
+      </div>
+      <div class="raceend" id="mulRaceEnd" hidden></div>
+    </div>
+  </section>
+
   <section class="panel multiply-panel" id="multiplyPanel">
     <div class="gamehead"><button class="back" id="mulBack">← Oyunlar</button><h2>✖️ Sınırsız Çarpma Atölyesi</h2></div>
     <div id="mulModeScreen">
@@ -192,6 +211,7 @@ const G=[
  {id:'subtraction-race',icon:'🏁',color:'#1488a8',title:'İki Kişilik Çıkarma Yarışı',desc:'İki oyuncu, birbirinden farklı 15 çıkarma sorusunda arabalarını bağımsız yarıştırır.',out:'Onluk bozmadan ve onluk bozarak iki basamaklı çıkarma',subRace:true,q:[]},
  {id:'infinite-add',icon:'➕',color:'#5b45bd',title:'Sınırsız Toplama Arenası',desc:'Eldeli veya eldesiz iki basamaklı toplama seç; sen bitirene kadar çözmeye devam et.',out:'İki basamaklı sayılarla sınırsız alıştırma',infinite:true,q:[]},
  {id:'infinite-sub',icon:'➖',color:'#1488a8',title:'Sınırsız Çıkarma Atölyesi',desc:'Onluk bozmadan veya onluk bozarak iki basamaklı çıkarma seç; öğrendikçe yeni işlemler gelsin.',out:'İki basamaklı sayılarla sınırsız çıkarma alıştırması',subtraction:true,q:[]},
+ {id:'multiplication-race',icon:'🏎️',color:'#5e9f3a',title:'İki Kişilik Çarpma Yarışı',desc:'İki oyuncu, birbirinden farklı 15 çarpma sorusunda arabalarını bağımsız yarıştırır.',out:'MAT.2.2.4–5 · 1’lerden 5’lere kadar çarpma',mulRace:true,q:[]},
  {id:'infinite-multiply',icon:'✖️',color:'#5e9f3a',title:'Sınırsız Çarpma Atölyesi',desc:'1’lerden 5’lere kadar istediğin çarpım tablosunu seç veya karışık çalış; sorular sen bırakana kadar devam etsin.',out:'MAT.2.2.4–5 · 10’a kadar olan sayıları 1, 2, 3, 4 ve 5 ile çarpma',multiply:true,q:[]},
  {id:'problem',icon:'🕵️',color:'#e26767',title:'Problem Çözme Dedektifi',desc:'Günlük yaşamda toplama ve çıkarma gerektiren iki aşamalı problemleri çöz.',out:'MAT.2.2.1',q:[
  ['Ece’nin 24, Ali’nin 18 çıkartması var. İkisi toplam kaç çıkartma eder?','🎟️ 24 + 18 = ?',42,[42,32,52,40]],
@@ -238,7 +258,7 @@ const G=[
 ];
 const $=s=>document.querySelector(s);let game=null,pos=0,score=0,locked=false,total=Number(localStorage.getItem('iu-total')||0);$('#total').textContent=total;
 $('#cards').innerHTML=G.map((g,i)=>`<button class="card" style="--c:${g.color}" data-i="${i}"><div class="icon">${g.icon}</div><h2>${g.title}</h2><p>${g.desc}</p><span class="play">Oyuna Başla</span><div class="outcome">Öğrenme çıktısı: ${g.out}</div></button>`).join('');
-document.querySelectorAll('.card').forEach(b=>b.onclick=()=>{const g=G[+b.dataset.i];g.infinite?openInfinite():g.subtraction?openSubtraction():g.multiply?openMultiply():g.subRace?openSubRace():g.race?openRace():start(g)});$('#back').onclick=home;$('#next').onclick=()=>{pos++;pos<game.q.length?render():finish()};
+document.querySelectorAll('.card').forEach(b=>b.onclick=()=>{const g=G[+b.dataset.i];g.infinite?openInfinite():g.subtraction?openSubtraction():g.multiply?openMultiply():g.mulRace?openMulRace():g.subRace?openSubRace():g.race?openRace():start(g)});$('#back').onclick=home;$('#next').onclick=()=>{pos++;pos<game.q.length?render():finish()};
 function start(g){game=g;pos=score=0;$('#home').hidden=true;$('#panel').classList.add('on');$('#gameTitle').textContent=g.icon+' '+g.title;$('#result').hidden=true;$('#play').hidden=false;render();scrollTo({top:0,behavior:'smooth'})}
 function home(){$('#home').hidden=false;$('#panel').classList.remove('on');scrollTo({top:0,behavior:'smooth'})}
 function render(){locked=false;const [q,v,a,opts]=game.q[pos];$('#count').textContent=`Görev ${pos+1} / ${game.q.length}`;$('#gameScore').textContent=score;$('#bar').style.width=`${pos/game.q.length*100}%`;$('#question').textContent=q;$('#visual').textContent=v;$('#feedback').textContent='';$('#next').style.display='none';const shuffled=[...opts].sort(()=>Math.random()-.5);$('#answers').innerHTML=shuffled.map(x=>`<button class="answer"></button>`).join('');[...$('#answers').children].forEach((b,i)=>{b.textContent=shuffled[i];b.onclick=()=>choose(b,shuffled[i],a)})}
@@ -247,7 +267,7 @@ function finish(){$('#bar').style.width='100%';$('#play').hidden=true;$('#result
 
 let infMode='',infA=0,infB=0,infSolved=0,infCorrect=0,infStreak=0,infScore=0,infLocked=false,lastPair='',activeCalcField='onesInput';
 function openInfinite(){
-  $('#home').hidden=true;$('#panel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#infinitePanel').classList.add('on');
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#infinitePanel').classList.add('on');
   $('#modeScreen').hidden=false;$('#infiniteGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
 }
 function closeInfinite(){
@@ -348,7 +368,7 @@ $('#stopInfinite').onclick=stopSession;
 
 let subMode='',subA=0,subB=0,subSolved=0,subCorrect=0,subStreak=0,subScore=0,subLocked=false,subLastPair='',activeSubField='subOnesInput';
 function openSubtraction(){
-  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#subtractionPanel').classList.add('on');
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#subtractionPanel').classList.add('on');
   $('#subModeScreen').hidden=false;$('#subtractionGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
 }
 function closeSubtraction(){$('#subtractionPanel').classList.remove('on');$('#home').hidden=false;scrollTo({top:0,behavior:'smooth'})}
@@ -435,7 +455,7 @@ $('#checkDifference').onclick=checkSubtraction;$('#nextDifference').onclick=make
 
 let mulTable='mixed',mulA=1,mulB=1,mulSolved=0,mulCorrect=0,mulStreak=0,mulScore=0,mulLocked=false,mulLast='';
 function openMultiply(){
-  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#multiplyPanel').classList.add('on');
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#multiplyPanel').classList.add('on');
   $('#mulModeScreen').hidden=false;$('#multiplyGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
 }
 function closeMultiply(){$('#multiplyPanel').classList.remove('on');$('#home').hidden=false;scrollTo({top:0,behavior:'smooth'})}
@@ -477,6 +497,68 @@ function stopMultiply(){
 $('#mulBack').onclick=closeMultiply;document.querySelectorAll('[data-multable]').forEach(b=>b.onclick=()=>beginMultiply(b.dataset.multable));
 document.querySelectorAll('#mulNumberPad [data-muldigit]').forEach(b=>b.onclick=()=>putMulDigit(b.dataset.muldigit));$('#mulErase').onclick=()=>{$('#mulAnswer').value='';$('#mulAnswer').classList.remove('wrong','correct')};
 $('#checkProduct').onclick=checkMultiplication;$('#nextProduct').onclick=makeMultiplication;$('#stopMultiply').onclick=stopMultiply;
+
+
+let mulRaceQuestions=[[],[]],mulRaceIndex=[0,0],mulRacePos=[0,0],mulRaceCorrect=[0,0],mulRaceTime=[0,0],mulRaceAnswered=[false,false],mulRaceStartedAt=[0,0],mulRaceFinished=[false,false];
+function openMulRace(){
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#racePanel').classList.remove('on');$('#mulRacePanel').classList.add('on');
+  $('#mulRaceIntro').hidden=false;$('#mulRaceGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
+}
+function closeMulRace(){$('#mulRacePanel').classList.remove('on');$('#home').hidden=false;scrollTo({top:0,behavior:'smooth'})}
+function makeMulRaceSet(used){
+  const tables=[];for(let t=1;t<=5;t++)for(let i=0;i<3;i++)tables.push(t);tables.sort(()=>Math.random()-.5);
+  return tables.map(table=>{let other,key;do{other=rand(0,10);key=table+'x'+other}while(used.has(key));used.add(key);const swap=Math.random()<.5;const a=swap?other:table,b=swap?table:other;return {a:a,b:b,answer:a*b,table:table}});
+}
+function buildMulRace(){
+  const used=new Set();mulRaceQuestions=[makeMulRaceSet(used),makeMulRaceSet(used)];mulRaceIndex=[0,0];mulRacePos=[0,0];mulRaceCorrect=[0,0];mulRaceTime=[0,0];mulRaceAnswered=[false,false];mulRaceFinished=[false,false];
+}
+function mulRaceOptions(answer){
+  const set=new Set([answer]),shifts=[-10,10,-5,5,-2,2,-1,1,-3,3];
+  while(set.size<4){const v=answer+shifts[rand(0,shifts.length-1)];if(v>=0&&v<=50)set.add(v)}
+  return [...set];
+}
+function updateMulRaceCars(finalWinner){
+  const p1=finalWinner===0?100:Math.min(91,mulRacePos[0]/15*88+2),p2=finalWinner===1?100:Math.min(91,mulRacePos[1]/15*88+2);
+  $('#mulCar1').style.left=p1+'%';$('#mulCar2').style.left=p2+'%';
+}
+function startMulRaceGame(){
+  buildMulRace();$('#mulRaceIntro').hidden=true;$('#mulRaceGame').hidden=false;$('#mulRaceEnd').hidden=true;
+  document.querySelectorAll('#mulRacePanel .racerbox').forEach(b=>b.classList.remove('finished'));updateMulRaceCars();renderMulRacePlayer(0);renderMulRacePlayer(1);
+}
+function renderMulRacePlayer(player){
+  if(mulRaceIndex[player]>=15){finishMulRacePlayer(player);return}
+  const n=player+1,q=mulRaceQuestions[player][mulRaceIndex[player]],box=$('#mulAnswers'+n);
+  mulRaceAnswered[player]=false;mulRaceStartedAt[player]=performance.now();
+  $('#mulRound'+n).textContent='Soru '+(mulRaceIndex[player]+1)+' / 15';$('#mulRaceMode'+n).textContent=q.table+'’lerle çarpma';
+  $('#mulOperation'+n).textContent=q.a+' × '+q.b+' = ?';$('#mulStatus'+n).textContent='Cevabını seç';
+  const shuffled=mulRaceOptions(q.answer).sort(()=>Math.random()-.5);
+  box.innerHTML=shuffled.map(v=>'<button class="raceanswer">'+v+'</button>').join('');
+  [...box.children].forEach((btn,i)=>btn.onclick=()=>chooseMulRace(player,btn,shuffled[i],q.answer));
+}
+function chooseMulRace(player,btn,value,right){
+  if(mulRaceAnswered[player]||mulRaceFinished[player])return;mulRaceAnswered[player]=true;mulRaceTime[player]+=performance.now()-mulRaceStartedAt[player];
+  const n=player+1,box=$('#mulAnswers'+n);[...box.children].forEach(b=>{b.disabled=true;if(Number(b.textContent)===right)b.classList.add('good')});
+  if(value===right){mulRaceCorrect[player]++;mulRacePos[player]=Math.min(15,mulRacePos[player]+1);btn.classList.add('good');$('#mulStatus'+n).textContent='✅ İleri! Yeni soru geliyor.'}
+  else{mulRacePos[player]=Math.max(0,mulRacePos[player]-1);btn.classList.add('bad');$('#mulStatus'+n).textContent='❌ Geri! Doğru: '+right}
+  updateMulRaceCars();setTimeout(()=>{mulRaceIndex[player]++;renderMulRacePlayer(player)},650);
+}
+function finishMulRacePlayer(player){
+  if(mulRaceFinished[player])return;mulRaceFinished[player]=true;const n=player+1,box=$('#mulAnswers'+n);
+  box.innerHTML='';$('#mulRound'+n).textContent='15 / 15 tamamlandı';$('#mulRaceMode'+n).textContent='🏁 Hazır';
+  $('#mulOperation'+n).textContent='Soruların bitti!';$('#mulStatus'+n).textContent=mulRaceFinished[1-player]?'Sonuç hazırlanıyor…':'Rakibin devam ediyor.';
+  box.closest('.racerbox').classList.add('finished');if(mulRaceFinished[0]&&mulRaceFinished[1])finishMulRace();
+}
+function finishMulRace(){
+  let winner=-1;
+  if(mulRacePos[0]!==mulRacePos[1])winner=mulRacePos[0]>mulRacePos[1]?0:1;
+  else if(mulRaceCorrect[0]!==mulRaceCorrect[1])winner=mulRaceCorrect[0]>mulRaceCorrect[1]?0:1;
+  else if(Math.abs(mulRaceTime[0]-mulRaceTime[1])>100)winner=mulRaceTime[0]<mulRaceTime[1]?0:1;
+  updateMulRaceCars(winner);
+  const title=winner<0?'🤝 Yarış Berabere!':winner===0?'🔵 1. Oyuncu Kazandı!':'🔴 2. Oyuncu Kazandı!';
+  $('#mulRaceEnd').hidden=false;$('#mulRaceEnd').innerHTML='<h3>'+title+'</h3><div class="scorecompare"><div><b>'+mulRaceCorrect[0]+'</b><small>1. Oyuncu doğru</small></div><div><b>'+mulRaceCorrect[1]+'</b><small>2. Oyuncu doğru</small></div></div><p>Arabaların son konumu, doğru sayıları ve süreleri karşılaştırıldı.</p><button class="startRaceBtn" id="againMulRace">Tekrar Yarış 🏁</button> <button class="back" id="mulRaceHome">Oyunlara Dön</button>';
+  $('#againMulRace').onclick=startMulRaceGame;$('#mulRaceHome').onclick=closeMulRace;
+}
+$('#mulRaceBack').onclick=closeMulRace;$('#startMulRace').onclick=startMulRaceGame;
 
 let subRaceQuestions=[[],[]],subRaceIndex=[0,0],subRacePos=[0,0],subRaceCorrect=[0,0],subRaceTime=[0,0],subRaceAnswered=[false,false],subRaceStartedAt=[0,0],subRaceFinished=[false,false];
 function openSubRace(){
@@ -547,7 +629,7 @@ $('#subRaceBack').onclick=closeSubRace;$('#startSubRace').onclick=startSubRaceGa
 
 let raceQuestions=[[],[]],raceIndex=[0,0],racePos=[0,0],raceCorrect=[0,0],raceTime=[0,0],raceAnswered=[false,false],raceStartedAt=[0,0],raceFinished=[false,false];
 function openRace(){
-  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#racePanel').classList.add('on');
+  $('#home').hidden=true;$('#panel').classList.remove('on');$('#infinitePanel').classList.remove('on');$('#subtractionPanel').classList.remove('on');$('#subRacePanel').classList.remove('on');$('#multiplyPanel').classList.remove('on');$('#mulRacePanel').classList.remove('on');$('#racePanel').classList.add('on');
   $('#raceIntro').hidden=false;$('#raceGame').hidden=true;scrollTo({top:0,behavior:'smooth'});
 }
 function closeRace(){$('#racePanel').classList.remove('on');$('#home').hidden=false;scrollTo({top:0,behavior:'smooth'})}
