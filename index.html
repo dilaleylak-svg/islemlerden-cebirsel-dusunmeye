@@ -314,14 +314,86 @@ const G=[
  ['20 ÷ 5 = □ − 3 eşitliğini tamamla.','4 = □ − 3',7,[7,1,4,12]],
  ['9 + 11 ile aynı sonucu veren ifade hangisidir?','9 + 11 = 20','4 × 5',['4 × 5','18 ÷ 3','30 − 5','12 + 9']] ]}
 ];
+
+/* PDF uyumlu 22 konu oyunu — her oyun için 100 soruluk havuz */
+const tpNum=(p,v,a,step=1)=>{
+  const vals=[a,a+step,a-step,a+2*step,a-2*step].filter((x,i,ar)=>Number.isInteger(x)&&x>=0&&ar.indexOf(x)===i).slice(0,4);
+  for(let n=0;vals.length<4;n++)if(!vals.includes(n))vals.push(n);
+  return [p,v,a,vals];
+};
+const tpText=(p,v,a,wrong)=>{
+  const vals=[a,...wrong].filter((x,i,ar)=>ar.indexOf(x)===i);
+  const fillers=['Bunların hiçbiri','İşlem kurulamaz','Sonuç değişir','Eksik bilgi var'];
+  for(const x of fillers)if(vals.length<4&&!vals.includes(x))vals.push(x);
+  return [p,v,a,vals.slice(0,4)];
+};
+const tpHundred=fn=>Array.from({length:100},(_,i)=>{const x=fn(i);x[1]+=' • Kart '+(i+1);return x});
+const tpPair=(i,kind)=>{
+  const pairs=[];
+  for(let a=10;a<=99;a++)for(let b=10;b<=99;b++){
+    if(a+b>100)continue;
+    const carry=(a%10+b%10)>=10;
+    if((kind==='carry'&&carry)||(kind==='nocarry'&&!carry))pairs.push([a,b]);
+  }
+  return pairs[(i*37)%pairs.length];
+};
+const tpSubPair=(i,regroup)=>{
+  const pairs=[];
+  for(let a=20;a<=99;a++)for(let b=10;b<a;b++){
+    const needs=(a%10)<(b%10);
+    if(needs===regroup)pairs.push([a,b]);
+  }
+  return pairs[(i*41)%pairs.length];
+};
+const tpNames=['Ece','Mert','Zeynep','Arda','Elif','Can','Duru','Kerem','Ada','Efe'];
+const tpItems=['kitap','kalem','boncuk','çıkartma','bilye','ceviz','balon','kart','çiçek','oyuncak'];
+const tpTopics=[
+{id:'t01-eldesiz-toplama',icon:'➕',color:'#5b78d1',title:'Eldesiz Toplama İşlemi',desc:'İki basamaklı sayıları elde oluşturmadan topla.',out:'Eldesiz toplama',q:tpHundred(i=>{const [a,b]=tpPair(i,'nocarry');return tpNum(a+' + '+b+' kaçtır?','Birler toplamı 10’dan küçüktür.',a+b,10)})},
+{id:'t02-eldeli-toplama',icon:'🧮',color:'#7652cf',title:'Eldeli Toplama İşlemi',desc:'Birler basamağında oluşan eldeyi doğru kullan.',out:'Eldeli toplama',q:tpHundred(i=>{const [a,b]=tpPair(i,'carry');return tpNum(a+' + '+b+' kaçtır?','Önce birler basamağını topla, eldeyi onluklara ekle.',a+b,10)})},
+{id:'t03-toplama-problemleri',icon:'🕵️',color:'#e26767',title:'Toplama İşlemi Problemleri',desc:'Günlük yaşam problemlerinde toplamı bul.',out:'Toplama problemleri',q:tpHundred(i=>{const [a,b]=tpPair(i,i%2?'carry':'nocarry'),n=tpNames[i%10],item=tpItems[(i*3)%10];return tpNum(n+' önce '+a+' '+item+', sonra '+b+' '+item+' topladı. Toplam kaç '+item+' oldu?','Problemi işlemle göster: '+a+' + '+b,a+b,10)})},
+{id:'t04-onluk-bozmadan-cikarma',icon:'➖',color:'#208bac',title:'Onluk Bozmadan Çıkarma İşlemi',desc:'Basamakları onluk bozmadan çıkar.',out:'Onluk bozmadan çıkarma',q:tpHundred(i=>{const [a,b]=tpSubPair(i,false);return tpNum(a+' − '+b+' kaçtır?','Birler basamağında onluk bozmaya gerek yoktur.',a-b,10)})},
+{id:'t05-cikarma-problemleri',icon:'🎒',color:'#e28743',title:'Çıkarma İşlemi Problemleri',desc:'Eksilen, çıkan ve kalanı günlük yaşamda kullan.',out:'Çıkarma problemleri',q:tpHundred(i=>{const [a,b]=tpSubPair(i,i%2===0),n=tpNames[i%10],item=tpItems[(i*7)%10];return tpNum(n+'’nin '+a+' '+item+'ı vardı. '+b+' tanesini kullandı. Kaç '+item+'ı kaldı?','Problemi işlemle göster: '+a+' − '+b,a-b,10)})},
+{id:'t06-toplama-cikarma-problemleri',icon:'🧭',color:'#db5c83',title:'Toplama ve Çıkarma İşlemi Problemleri',desc:'Probleme uygun işlemi seçip çöz.',out:'Toplama ve çıkarma problemleri',q:tpHundred(i=>{let a=25+(i*7)%45,b=5+(i*3)%15,d=2+(i*5)%10,n=tpNames[i%10];if(i%2===0)return tpNum(n+' '+a+' sayfa okudu, ertesi gün '+b+' sayfa daha okudu; sonra '+d+' sayfayı yeniden inceledi. Yeniden incelenmeyen kaç sayfa vardır?','Önce topla, sonra çıkar.',a+b-d,5);return tpNum('Kutuda '+(a+b)+' top vardı. '+b+' top alındı, sonra '+d+' top eklendi. Son durumda kaç top vardır?','Önce çıkar, sonra ekle.',a+d,5)})},
+{id:'t07-toplami-tahmin',icon:'🎯',color:'#2587ca',title:'Toplamı Tahmin Etme',desc:'Sayıları en yakın onluğa yuvarlayıp toplamı tahmin et.',out:'Toplamı tahmin etme',q:tpHundred(i=>{let a=11+(i*17)%78,b=11+(i*29)%78;let ans=Math.round(a/10)*10+Math.round(b/10)*10;return tpNum(a+' + '+b+' işleminin onluğa yuvarlanmış tahmini kaçtır?','Her iki sayıyı en yakın onluğa yuvarla.',ans,10)})},
+{id:'t08-zihinden-onluk-toplama',icon:'⚡',color:'#1e9a85',title:'10’un Katları ile Zihinden Toplama İşlemi',desc:'Onlukları zihinden hızlıca ekle.',out:'10’un katlarıyla zihinden toplama',q:tpHundred(i=>{let a=10+((i*7)%9)*10,b=10+((i*4+Math.floor(i/9))%9)*10;if(a+b>100)b=100-a;return tpNum(a+' + '+b+' işlemini zihinden bul.','Onlukları say: '+a/10+' onluk + '+b/10+' onluk.',a+b,10)})},
+{id:'t09-farki-tahmin',icon:'🔭',color:'#4474c4',title:'Çıkarma İşleminin Sonucunu Tahmin Etme',desc:'Sayıları en yakın onluğa yuvarlayıp farkı tahmin et.',out:'Farkı tahmin etme',q:tpHundred(i=>{let a=30+(i*23)%70,b=10+(i*11)%Math.max(11,a-10);if(b>=a)b=a-7;let ans=Math.round(a/10)*10-Math.round(b/10)*10;return tpNum(a+' − '+b+' işleminin onluğa yuvarlanmış tahmini kaçtır?','Sayıları en yakın onluğa yuvarla.',ans,10)})},
+{id:'t10-zihinden-onluk-cikarma',icon:'💨',color:'#1488a8',title:'10’un Katları ile Zihinden Çıkarma İşlemi',desc:'Onlukları zihinden hızlıca çıkar.',out:'10’un katlarıyla zihinden çıkarma',q:tpHundred(i=>{let a=20+((i*7)%9)*10,b=10+((i*3+Math.floor(i/9))%Math.max(1,a/10-1))*10;return tpNum(a+' − '+b+' işlemini zihinden bul.','Onlukları çıkar: '+a/10+' onluk − '+b/10+' onluk.',a-b,10)})},
+{id:'t11-verilmeyen-toplanan',icon:'🧩',color:'#8552c7',title:'Verilmeyen Toplananı Bulma',desc:'Toplam ve bir toplanandan yararlanarak eksik sayıyı bul.',out:'Verilmeyen toplanan',q:tpHundred(i=>{let a=5+(i*13)%46,b=5+(i*19)%Math.max(6,96-a);return tpNum(a+' + □ = '+(a+b)+' eşitliğinde □ kaçtır?','Toplamdan verilen toplananı çıkar.',b,5)})},
+{id:'t12-toplama-cikarma-iliskisi',icon:'🌉',color:'#684fc1',title:'Toplama ve Çıkarma İşleminin İlişkisi',desc:'Ters işlemlerle sonucu kontrol et.',out:'Toplama ve çıkarmanın ilişkisi',q:tpHundred(i=>{let a=10+(i*17)%60,b=5+(i*11)%Math.max(6,91-a),s=a+b;if(i%2===0)return tpText(a+' + '+b+' = '+s+' işlemini kontrol eden işlem hangisidir?','Toplamdan bir toplananı çıkar.',s+' − '+b+' = '+a,[s+' + '+b+' = '+a,a+' − '+b+' = '+s,s+' − '+a+' = '+b+'0']);return tpText(s+' − '+a+' = '+b+' işlemini kontrol eden işlem hangisidir?','Fark ile çıkanı topla.',b+' + '+a+' = '+s,[s+' + '+a+' = '+b,a+' − '+b+' = '+s,b+' − '+a+' = '+s])})},
+{id:'t13-carpma-islemi',icon:'✖️',color:'#5e9f3a',title:'Çarpma İşlemi',desc:'Eş grupları tekrarlı toplama ve çarpma ile göster.',out:'Çarpma işlemi',q:tpHundred(i=>{let a=1+i%5,b=1+Math.floor(i/5)%10,ans=a*b;if(i%2===0)return tpNum(a+' × '+b+' kaçtır?',a+' grup, her grupta '+b+' nesne.',ans,Math.max(1,a));return tpText(Array(a).fill(b).join(' + ')+' işleminin çarpma biçimi hangisidir?','Eşit toplananları say.',a+' × '+b,[b+' + '+a,b+' × '+(a+1),a+' × '+(b+1)])})},
+{id:'t14-carpanlarin-yeri',icon:'🔄',color:'#49a35a',title:'Çarpanların Yerlerinin Değişmesi',desc:'Çarpanlar yer değiştirince sonucun değişmediğini keşfet.',out:'Çarpanların değişme özelliği',q:tpHundred(i=>{let a=1+i%5,b=1+Math.floor(i/5)%10;return tpText(a+' × '+b+' ile aynı sonucu veren işlem hangisidir?','Grupların yönü değişse de nesne sayısı aynıdır.',b+' × '+a,[a+' + '+b,b+' × '+Math.min(10,a+1),Math.max(0,b-1)+' × '+a])})},
+{id:'t15-carpma-sifir-bir',icon:'0️⃣',color:'#799c31',title:'Çarpma İşleminde 1 ve 0’ın Etkisi',desc:'Bir ve sıfırla çarpmanın kuralını uygula.',out:'Çarpmada 0 ve 1',q:tpHundred(i=>{let n=1+(i*7)%50,z=i%2===0,ans=z?0:n;return tpNum(n+' × '+(z?0:1)+' kaçtır?',z?'Bir sayının sıfır katı yokluk gösterir.':'Bir grup sayının kendisidir.',ans,1)})},
+{id:'t16-carpma-problemleri',icon:'🍪',color:'#d88932',title:'Çarpma İşlemi Problemleri',desc:'Eş gruplu günlük yaşam problemlerini çöz.',out:'Çarpma problemleri',q:tpHundred(i=>{let a=1+i%5,b=1+Math.floor(i/5)%10,item=tpItems[(i*3)%10];return tpNum(a+' kutunun her birinde '+b+' '+item+' vardır. Toplam kaç '+item+' vardır?','Eş grup sayısı × her gruptaki nesne.',a*b,Math.max(1,a))})},
+{id:'t17-gruplama-paylastirma',icon:'🧺',color:'#e88b35',title:'Gruplara Ayırma ve Paylaştırma',desc:'Nesneleri eş gruplara ayır veya eşit paylaştır.',out:'Gruplama ve paylaştırma',q:tpHundred(i=>{let d=2+i%4,q=1+Math.floor(i/4)%5,total=d*q;if(i%2===0)return tpNum(total+' boncuk '+d+' çocuğa eşit paylaştırılırsa her çocuk kaç boncuk alır?','Her grupta eşit sayıda olmalı.',q,1);return tpNum(total+' boncuk '+d+'’şerli gruplara ayrılırsa kaç grup oluşur?','Nesneleri '+d+'’şerli ayır.',q,1)})},
+{id:'t18-cikarma-ve-bolme',icon:'🪜',color:'#33988d',title:'Çıkarma İşlemi ve Bölme',desc:'Ardışık çıkarma ile kaç eş grup oluştuğunu bul.',out:'Çıkarma ve bölme ilişkisi',q:tpHundred(i=>{let d=2+i%4,q=1+Math.floor(i/4)%5,total=d*q;return tpNum(total+' sayısından '+d+' sayısını sıfıra ulaşana kadar kaç kez çıkarırsın?','Bu, '+total+' ÷ '+d+' işlemini gösterir.',q,1)})},
+{id:'t19-bolme-islemi',icon:'➗',color:'#287fb7',title:'Bölme İşlemi',desc:'20’ye kadar sayıları 2, 3, 4 ve 5’e kalansız böl.',out:'Bölme işlemi',q:tpHundred(i=>{let d=2+i%4,q=1+Math.floor(i/4)%Math.floor(20/d),total=d*q;if(i%2===0)return tpNum(total+' ÷ '+d+' kaçtır?',total+' nesneyi '+d+' eş gruba paylaştır.',q,1);return tpText(total+' nesne '+d+'’şerli ayrılıyor. Bunu gösteren işlem hangisidir?','Kaç grup oluştuğunu düşün.',total+' ÷ '+d+' = '+q,[total+' × '+d+' = '+q,total+' − '+d+' = '+q,d+' ÷ '+total+' = '+q])})},
+{id:'t20-bolme-problemleri',icon:'🍎',color:'#3b7bc2',title:'Bölme İşlemi Problemleri',desc:'Paylaştırma ve gruplama problemlerini bölmeyle çöz.',out:'Bölme problemleri',q:tpHundred(i=>{let d=2+i%4,q=1+Math.floor(i/4)%Math.floor(20/d),total=d*q,item=tpItems[(i*7)%10];return tpNum(total+' '+item+', '+d+' öğrenciye eşit paylaştırılıyor. Her öğrenci kaç '+item+' alır?','Toplam nesne ÷ öğrenci sayısı.',q,1)})},
+{id:'t21-carpma-bolme-iliskisi',icon:'🔗',color:'#23a382',title:'Çarpma ve Bölme İşlemi Arasındaki İlişki',desc:'Bir çarpma işleminden ilgili bölme işlemini kur.',out:'Çarpma ve bölmenin ilişkisi',q:tpHundred(i=>{let a=2+i%4,b=1+Math.floor(i/4)%5,p=a*b;if(i%2===0)return tpText(a+' × '+b+' = '+p+' ise ilgili bölme işlemi hangisidir?','Çarpım bölü bir çarpan, diğer çarpanı verir.',p+' ÷ '+a+' = '+b,[p+' × '+a+' = '+b,a+' ÷ '+p+' = '+b,p+' − '+a+' = '+b]);return tpNum(p+' ÷ '+b+' kaçtır?',a+' × '+b+' = '+p+' ilişkisinden yararlan.',a,1)})},
+{id:'t22-esitlik',icon:'⚖️',color:'#d35799',title:'Eşitlik',desc:'Terazinin iki tarafını aynı değerde tut.',out:'Eşitlik',q:tpHundred(i=>{let a=5+(i*7)%35,b=3+(i*11)%25,sum=a+b,c=1+(i*13)%Math.max(2,sum);if(i%2===0)return tpNum(a+' + '+b+' = □ + '+c+' eşitliğinde □ kaçtır?','İki tarafın değeri de '+sum+' olmalıdır.',sum-c,2);let d=2+i%4,m=1+Math.floor(i/4)%5,p=d*m,k=i%Math.min(3,p+1);return tpNum(d+' × '+m+' = □ + '+k+' eşitliğinde □ kaçtır?','İki tarafın değeri de '+p+' olmalıdır.',p-k,1)})}
+];
+G.splice(8,G.length-8,...tpTopics);
+
 const $=s=>document.querySelector(s);let game=null,pos=0,score=0,locked=false,total=Number(localStorage.getItem('iu-total')||0);$('#total').textContent=total;
 $('#cards').innerHTML=G.map((g,i)=>`<button class="card" style="--c:${g.color}" data-i="${i}"><div class="icon">${g.icon}</div><h2>${g.title}</h2><p>${g.desc}</p><span class="play">Oyuna Başla</span><div class="outcome">Öğrenme çıktısı: ${g.out}</div></button>`).join('');
 document.querySelectorAll('.card').forEach(b=>b.onclick=()=>{const g=G[+b.dataset.i];g.infinite?openInfinite():g.subtraction?openSubtraction():g.multiply?openMultiply():g.division?openDivision():g.divRace?openDivRace():g.mulRace?openMulRace():g.subRace?openSubRace():g.race?openRace():start(g)});$('#back').onclick=home;$('#next').onclick=()=>{pos++;pos<game.q.length?render():finish()};
-function start(g){game={...g,q:[...g.q].sort(()=>Math.random()-.5)};pos=score=0;$('#home').hidden=true;$('#panel').classList.add('on');$('#gameTitle').textContent=g.icon+' '+g.title;$('#result').hidden=true;$('#play').hidden=false;render();scrollTo({top:0,behavior:'smooth'})}
+function start(g){
+  const source=G.find(x=>x.id===g.id)||g;
+  let selected=[...source.q];
+  if(source.id&&source.id.startsWith('t')&&source.q.length===100){
+    const key='iu-pool-v2-'+source.id;
+    let seen=[];try{seen=JSON.parse(localStorage.getItem(key)||'[]')}catch(e){seen=[]}
+    const qKey=x=>JSON.stringify([x[0],x[1],x[2]]);
+    const valid=new Set(source.q.map(qKey));seen=seen.filter(x=>valid.has(x));
+    let unseen=source.q.filter(x=>!seen.includes(qKey(x)));
+    if(unseen.length<20){seen=[];unseen=[...source.q]}
+    selected=unseen.sort(()=>Math.random()-.5).slice(0,20);
+    seen.push(...selected.map(qKey));localStorage.setItem(key,JSON.stringify(seen));
+  }
+  game={...source,q:selected.sort(()=>Math.random()-.5)};pos=score=0;$('#home').hidden=true;$('#panel').classList.add('on');$('#gameTitle').textContent=g.icon+' '+g.title;$('#result').hidden=true;$('#play').hidden=false;render();scrollTo({top:0,behavior:'smooth'})}
 function home(){$('#home').hidden=false;$('#panel').classList.remove('on');scrollTo({top:0,behavior:'smooth'})}
 function render(){locked=false;const [q,v,a,opts]=game.q[pos];$('#count').textContent=`Görev ${pos+1} / ${game.q.length}`;$('#gameScore').textContent=score;$('#bar').style.width=`${pos/game.q.length*100}%`;$('#question').textContent=q;$('#visual').textContent=v;$('#feedback').textContent='';$('#next').style.display='none';const shuffled=[...opts].sort(()=>Math.random()-.5);$('#answers').innerHTML=shuffled.map(x=>`<button class="answer"></button>`).join('');[...$('#answers').children].forEach((b,i)=>{b.textContent=shuffled[i];b.onclick=()=>choose(b,shuffled[i],a)})}
 function choose(btn,val,ans){if(locked)return;locked=true;document.querySelectorAll('.answer').forEach(b=>{b.disabled=true;if(String(b.textContent)===String(ans))b.classList.add('good')});if(String(val)===String(ans)){btn.classList.add('good');score+=10;total+=10;localStorage.setItem('iu-total',total);$('#total').textContent=total;$('#feedback').textContent='🎉 Harika! 10 puan kazandın.'}else{btn.classList.add('bad');$('#feedback').textContent=`💡 Doğru cevap: ${ans}`}$('#gameScore').textContent=score;$('#next').textContent=pos===game.q.length-1?'Sonucu gör 🏆':'Sonraki görev →';$('#next').style.display='block'}
-function finish(){$('#bar').style.width='100%';$('#play').hidden=true;$('#result').hidden=false;const ratio=score/(game.q.length*10),stars=ratio>=.84?'⭐⭐⭐':ratio>=.5?'⭐⭐':'⭐';$('#result').innerHTML=`<div class="stars">${stars}</div><h3>Görev tamamlandı!</h3><p><b>${score}</b> puan kazandın. ${ratio>=.84?'Bu konuda ustasın!':'Bir kez daha oynarsan daha da güçleneceksin!'}</p><button class="again" onclick="start(game)">Tekrar Oyna</button><button class="again" onclick="home()">Diğer Oyunlar</button>`}
+function finish(){$('#bar').style.width='100%';$('#play').hidden=true;$('#result').hidden=false;const ratio=score/(game.q.length*10),stars=ratio>=.84?'⭐⭐⭐':ratio>=.5?'⭐⭐':'⭐';$('#result').innerHTML=`<div class="stars">${stars}</div><h3>Görev tamamlandı!</h3><p><b>${score}</b> puan kazandın. ${ratio>=.84?'Bu konuda ustasın!':'Bir kez daha oynarsan daha da güçleneceksin!'}</p><button class="again" onclick="start(G.find(x=>x.id===game.id)||game)">Yeni 20 Soru</button><button class="again" onclick="home()">Diğer Oyunlar</button>`}
 
 let infMode='',infA=0,infB=0,infSolved=0,infCorrect=0,infStreak=0,infScore=0,infLocked=false,lastPair='',activeCalcField='onesInput';
 function openInfinite(){
