@@ -327,7 +327,7 @@ const tpText=(p,v,a,wrong)=>{
   for(const x of fillers)if(vals.length<4&&!vals.includes(x))vals.push(x);
   return [p,v,a,vals.slice(0,4)];
 };
-const tpHundred=fn=>Array.from({length:100},(_,i)=>{const x=fn(i);x[1]+=' • Kart '+(i+1);return x});
+const tpHundred=fn=>Array.from({length:100},(_,i)=>fn(i));
 const tpPair=(i,kind)=>{
   const pairs=[];
   for(let a=10;a<=99;a++)for(let b=10;b<=99;b++){
